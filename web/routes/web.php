@@ -14,3 +14,13 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::prefix('/fb')->group(function (){
+
+    Route::get('login', "FacebookUser@store")->name('fb.login');
+    Route::get('login/callback', "FacebookUser@storeCallback")->name('fb.callback');
+
+});
+
+Route::view('/loginfb', 'loginfb');
