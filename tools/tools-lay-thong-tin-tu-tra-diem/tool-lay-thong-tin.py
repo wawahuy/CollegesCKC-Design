@@ -1,23 +1,41 @@
 import requests
 import xlsxwriter
 import os
+import threading
+import time
  
 dirpath = os.path.dirname(os.path.abspath(__file__))
 
+codeClass = {
+    "0463"  :   "CĐN Hàn",
+    "0461"  :   "CĐN C.Gọt K.Loại",
+    "0462"  :   "CĐN Nguội Sưa Máy",
+    "0464"  :   "CĐN KTML & ĐH K.Khí",
+    "0465"  :   "CĐN Ô tô",
+    "0466"  :   "CĐN Điện Công Nghiệp",
+    "0468"  :   "CĐN Quản Trị Mạng PC",
+    "0469"  :   "CĐN Lắp Ráp & Sửa PC",
+    "0467"  :   "CĐN Đ.Tử Công Nghiệp",
+    "0470"  :   "CĐN Kế Toán DN",
+    "0301"  :   "CĐ Cơ Khí",
+    "0302"  :   "CĐ Ô Tô",
+    "0306"  :   "CĐ CNTT",
+    "0303"  :   "CĐ KT ĐĐT",
+    "0304"  :   "CĐ Cơ Điện Lạnh",
+    "0307"  :   "CĐ Cơ Điện Tử",
+    "0310"  :   "CĐ Kế Toán", 
+    "0308"  :   "CĐ Điện Tử, TT",
+    "0300"  :   "CĐ Tự Động Hóa"
+}
 
-# Create an new Excel file and add a worksheet.
-workbook = xlsxwriter.Workbook(dirpath + '/excel/19KeToan.xlsx')
-worksheet = workbook.add_worksheet()
-row = 0
-stop = False
+START_K = 17
+END_K = 19
 
 
 def post(url, data):
     return requests.post(url=url, data=data)
 
-def getInfo(codeA, codeB, year, i):
-    global workbook, row, stop
-
+def getInfo(codeA, year, i, row, worksheet):
     if i<10:
         i= '000' + i
     elif i<100:
@@ -28,15 +46,14 @@ def getInfo(codeA, codeB, year, i):
         i= str(i)
 
 
-    data = {'txtMaHSSV': codeA+codeB+year+i}
+    data = {'txtMaHSSV': codeA+year+i}
     res = post('http://tradiem.caothang.edu.vn/', data)
     body = res.content
 
     spbody = body.split('Mã HSSV: <b>'.encode("utf-8"))
 
     if len(spbody) == 1:
-        stop = True
-        return
+        return False
 
     body = spbody[1]
 
@@ -72,15 +89,50 @@ def getInfo(codeA, codeB, year, i):
     worksheet.write(row, 3, noisinh)
     worksheet.write(row, 4, tenlop)
 
-    row = row + 1
+    return True
 
 
-for i in range(1001, 4010):
-    if stop == False:
-        getInfo('03','10','19', i)
 
-workbook.close()
+workbooks = []
+countThread = 0
+
+def getClass(c, k, name, worksheet):
+    global countThread
+    print('Get Class '+name + " K"+ k + " MSSV" + str(c)+str(k)+"xxxx!")
+    row = 0
+    found = 0
+    for stt in range(1001, 5000):
+        status = getInfo(str(c), str(k), stt, row, worksheet)
+        if status == False:
+            found += 1
+        else:
+            found = 0
+            row += 1
+        
+        if found >= 20:
+            print('Complete Class '+name+"! K" + k)
+            countThread-=1
+            break
+        
 
 
-#04 70 : CĐN Kế Toán Doanh Ngiệp
-#03 10 : CĐ Kế Toán
+
+for k in range(START_K, END_K+1):
+    workbook = xlsxwriter.Workbook(dirpath + '/excel/K'+str(k)+'.xlsx')
+
+    for c in codeClass:
+        name = codeClass[c]
+        worksheet = workbook.add_worksheet(name)
+        countThread += 1
+        t = threading.Thread(target = getClass, args = (str(c), str(k), name, worksheet))
+        t.start()
+
+    workbooks.append(workbook)
+    
+
+while countThread > 0:
+    time.sleep(1)
+
+for workbook in workbooks:
+    workbook.close()
+
