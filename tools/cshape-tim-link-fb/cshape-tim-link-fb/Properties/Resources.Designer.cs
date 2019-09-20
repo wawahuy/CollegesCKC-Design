@@ -63,9 +63,60 @@ namespace cshape_tim_link_fb.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap _5de710b32a6b1efe58704af1e354416b {
+            get {
+                object obj = ResourceManager.GetObject("5de710b32a6b1efe58704af1e354416b", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap _89804 {
             get {
                 object obj = ResourceManager.GetObject("89804", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap kisspng_predictive_analytics_computer_icons_data_analysis_statistical_information_analysis_5b0cec88d84259_6616491515275736408858 {
+            get {
+                object obj = ResourceManager.GetObject("kisspng-predictive-analytics-computer-icons-data-analysis-statistical-information" +
+                        "-analysis-5b0cec88d84259.6616491515275736408858", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap logo_CT_Tran {
+            get {
+                object obj = ResourceManager.GetObject("logo CT Tran", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pexels_photo_2894957 {
+            get {
+                object obj = ResourceManager.GetObject("pexels-photo-2894957", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap unnamed {
+            get {
+                object obj = ResourceManager.GetObject("unnamed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

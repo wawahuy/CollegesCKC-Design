@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cshape-tim-link-fb", "cshape-tim-link-fb\cshape-tim-link-fb.csproj", "{4A6DCB4B-1044-4BC9-ABDF-29EF8E847C56}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App Tim Link FB", "cshape-tim-link-fb\App Tim Link FB.csproj", "{4A6DCB4B-1044-4BC9-ABDF-29EF8E847C56}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAO", "DAO\DAO.csproj", "{A6EDC405-9702-45F4-AE6C-276853E0556B}"
 EndProject
