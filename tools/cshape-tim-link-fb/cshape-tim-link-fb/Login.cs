@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace cshape_tim_link_fb
 {
-    public partial class App : Form
+    public partial class Login : Form
     {
-        public App()
+        public Login()
         {
             InitializeComponent();
         }
