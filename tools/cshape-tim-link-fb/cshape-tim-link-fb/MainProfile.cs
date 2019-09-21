@@ -12,7 +12,8 @@ namespace cshape_tim_link_fb
 {
     public partial class MainProfile : Form
     {
-        Form m_editProfileBox, m_browserProfileBox;
+        EditProfileBox m_editProfileBox;
+        BrowserProfileBox m_browserProfileBox;
 
         public MainProfile()
         {
@@ -32,6 +33,20 @@ namespace cshape_tim_link_fb
             m_editProfileBox.Dock = DockStyle.Left;
             m_browserProfileBox.Dock = DockStyle.Right;
             m_browserProfileBox.Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom;
+
+            Waiting wait = new Waiting();
+            Init(wait);
+
+            wait.Show();
+            Enabled = false;
+        }
+
+        private async void Init(Waiting wait)
+        {
+            await m_browserProfileBox.InitBrowser();
+            wait.Close();
+            m_browserProfileBox.InitWindow();
+            Enabled = true;
         }
 
     }

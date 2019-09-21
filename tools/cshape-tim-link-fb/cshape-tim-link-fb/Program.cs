@@ -16,7 +16,7 @@ namespace cshape_tim_link_fb
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainProfile());
+            Application.Run(new Login());
         }
     }
 }

@@ -16,5 +16,20 @@ namespace cshape_tim_link_fb
         {
             InitializeComponent();
         }
+
+        private void btn_login_Click(object sender, EventArgs e)
+        {
+            Open();
+        }
+
+        private void Open()
+        {
+            this.Hide();
+
+            MainProfile bp = new MainProfile();
+            bp.ShowDialog();
+
+            this.Show();
+        }
     }
 }

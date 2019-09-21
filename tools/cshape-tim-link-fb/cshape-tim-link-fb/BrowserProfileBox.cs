@@ -30,15 +30,26 @@ namespace cshape_tim_link_fb
 
         private void BrowserProfileBox_Load(object sender, EventArgs e)
         {
-            options = new ChromeOptions();
-            options.AddArguments("--window-size=1024x768");
-            options.AddArguments("user-data-dir=" + GetUserDataDir());
-            service = ChromeDriverService.CreateDefaultService();
-            service.HideCommandPromptWindow = true;
-            driver = new ChromeDriver(service, options);
+        }
 
-            hwndWinBrowser = GetHWND();
-            Common.Win32.SetParent(hwndWinBrowser, this.Handle);
+        public Task InitBrowser() {
+            return Task.Run(() =>
+            {
+                options = new ChromeOptions();
+                options.AddArguments("--disable-notifications");
+                options.AddArguments("--window-size=1024x768");
+                options.AddArgument("--window-position=-32000,-32000");
+                options.AddArguments("user-data-dir=" + GetUserDataDir());
+                service = ChromeDriverService.CreateDefaultService();
+                service.HideCommandPromptWindow = true;
+                driver = new ChromeDriver(service, options);
+            });
+        }
+
+        public void InitWindow()
+        {
+            hwndWinBrowser = GetHWNDBrowser();
+            Common.Win32.SetParent(hwndWinBrowser, Handle);
             panelWindowChrome_SizeChanged(null, null);
         }
 
@@ -65,7 +76,7 @@ namespace cshape_tim_link_fb
         }
 
 
-        private IntPtr GetHWND()
+        private IntPtr GetHWNDBrowser()
         {
             try
             {

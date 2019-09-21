@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.lb_notifi = new System.Windows.Forms.Label();
             this.m_lbdot = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // label1
+            // lb_notifi
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(82, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(139, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Đang đợi phản hồi từ server";
+            this.lb_notifi.Location = new System.Drawing.Point(40, 28);
+            this.lb_notifi.Name = "lb_notifi";
+            this.lb_notifi.Size = new System.Drawing.Size(181, 13);
+            this.lb_notifi.TabIndex = 0;
+            this.lb_notifi.Text = "Đang đợi phản hồi từ server";
+            this.lb_notifi.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // m_lbdot
             // 
@@ -56,10 +56,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(332, 70);
             this.Controls.Add(this.m_lbdot);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lb_notifi);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "Waiting";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = " ";
+            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Waiting_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -68,7 +70,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
+        public System.Windows.Forms.Label lb_notifi;
         private System.Windows.Forms.Label m_lbdot;
     }
 }
