@@ -1,0 +1,71 @@
+.btn-facebook {
+    color: white;
+    background-color: #3b5998;
+  }
+  
+.btn-facebook :hover {
+    color: #eee;
+}
+
+.login-page {
+    position: fixed;
+    z-index: 10;
+    transition: 1s all;
+}
+
+.background-full {
+    position: fixed;
+    z-index: -1;
+    width: 140%;
+    height: 140%;
+    top: -20%;
+    left: -20%;
+}
+
+.background-full > img {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    top: 0px;
+    transition: 0.5s opacity;
+}
+
+
+/*---------- LOGO -----------------*/
+
+.page-logo {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    left: 0;
+    transition: 1s all;
+}
+
+.page-logo > div {
+    position: absolute;
+    background: -webkit-linear-gradient(110deg, #09203f  60%, #537895 60%);
+    width: 100%; 
+    height: 100%;
+    z-index: 3;
+}
+
+.page-logo > canvas {
+    position: absolute;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+}
+
+.page-logo > img {
+    opacity: 0.02;
+    position: absolute;
+    z-index: 4;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!------Stylesheet------>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/v4-shims.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+
+        <!------Javascript------>
+        <script src="js/jquery-3.4.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/v4-shims.js"></script>
+
+    </head>
+
+    <body>
+        <div class="container-fluid">
+
+            <!-- <div class="page-logo">
+                <canvas class="canvas"></canvas>
+                <div></div>
+                <img src='image/home/f1.jpg' />
+            </div> -->
+                 
+            <div id="skrollr-body">
+                <div id="Scene">
+                    <div id="bg1" class="parallax-layer"
+                        data-0="left:0px;"
+                        data-5000="left:-1000px;">
+                    </div>
+                    <div id="bg2" class="parallax-layer"
+                        data-0="left:0px;"
+                        data-5000="left:-2500px;">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </body>
+
+
+    <script src="js/skrollr.js"></script>
+    <script src="js/logo.js"></script>
+
+    <script>
+        
+        skrollr.init();
+
+        $(document).ready(function(){            
+            $('.page-logo').css('height', $(window).height());
+        });
+
+    </script>
+
+
+</html>

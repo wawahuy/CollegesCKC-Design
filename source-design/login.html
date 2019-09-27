@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!------Stylesheet------>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/v4-shims.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/styles.css">
+
+        <!------Javascript------>
+        <script src="js/jquery-3.4.1.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/v4-shims.js"></script>
+
+    </head>
+
+    <body>
+        <div class="container-fluid">
+
+            <div class="page-logo">
+                <canvas class="canvas"></canvas>
+            </div>
+
+            <div class="background-full row" id="image-background">
+                <img src='image/home/f1.jpg' />
+                <img src='image/home/f2.jpg' />
+                <img src='image/home/f3.jpg' />
+                <img src='image/home/f4.jpg' />
+                <img src='image/home/f5.jpg' />
+            </div>
+
+            <div class="row">
+
+                <div class="col-lg-12 login-page" id='login-btn'>
+                        <button class="btn btn-lg btn-facebook text-uppercase" style="bottom: 50%; position: absolute; left: 50%; transform: translateX(-50%); " type="submit"><i class="fab fa-facebook-f mr-2"></i> Sign in with Facebook</button>
+                </div>
+    
+            </div>        
+        </div>
+
+    </body>
+
+
+    <script>
+        const IMG_FULL_ID = 'image-background';
+        const LOGIN_BTN_ID = 'login-btn';
+        const IMG_FULL_MOVE_RATIO_X = 10;
+        const IMG_FULL_MOVE_RATIO_Y = 10;
+        const TIME_LOGO = 2000;
+
+        var imgbg = $('#' + IMG_FULL_ID);
+        var loginpage = $('#' + LOGIN_BTN_ID);
+        var domImage = [];
+        var posImage = 0;
+        var mouse_old;
+        var top_old = 0;
+        var disableMouseMove = false;
+        var timeOutDMM = undefined;
+        var timeLogo;
+
+        $(document).ready(function(){            
+            
+            timeLogo   = (new Date()).getTime();
+            domImage   = imgbg.find('img');
+
+            $(document.body).css('height', ($(window).height() + 20)*domImage.length);
+            $(window).scrollTop(0);
+            $('.page-logo').css('height', $(window).height() - 100);
+            $('.login-page').css('height', $(window).height());
+
+            loginpage.hide();
+            loginpage.css('width', 0);
+            loginpage.css('top', '50%');
+            loginpage.css('left', '50%');
+            loginpage.css('opacity', 0);
+
+            setTimeout(function (){
+                loginpage.show();
+                loginpage.css('width', '100%');
+                loginpage.css('opacity', 1.0);
+                loginpage.css('top', 0);
+                loginpage.css('left', 0);
+            }, 11000);
+
+            $(document).mousemove(function (e){
+                if(typeof mouse_old == 'undefined' || disableMouseMove){
+                    mouse_old = e;
+                    return;
+                }
+
+                if((new Date()).getTime() - timeLogo >= TIME_LOGO){
+                    $('.letter').each(function (index, element) {
+                        
+
+                        element.classList.remove("letter");
+                        void element.offsetWidth;
+                        element.classList.add("letter");
+                        timeLogo  = (new Date()).getTime();
+                    });
+                }
+
+                var x = mouse_old.pageX - e.pageX;
+                var y = mouse_old.pageY - e.pageY;
+
+                var position = imgbg.position();
+                imgbg.css('top',  position.top +  y/IMG_FULL_MOVE_RATIO_Y);
+                imgbg.css('left', position.left + x/IMG_FULL_MOVE_RATIO_X );
+
+                mouse_old = e;
+            });
+
+            $(window).scroll(function(){
+                var height = $(this).scrollTop() - top_old;
+                var pad = height > 0 ? 1 : -1;
+                var timeReMM = 200;
+                disableMouseMove = true;
+
+                if(Math.abs(height) > $(window).height()){
+                    var oldpos = posImage;
+                    posImage += pad;
+                    top_old = $(this).scrollTop();
+
+                    $(domImage[oldpos]).css('opacity', 0.2);
+                    setTimeout(function (o, n){
+                        $(domImage[o]).hide();
+                        $(domImage[n]).show();
+                        $(domImage[n]).css('opacity', 0.8);
+                        $(imgbg).css('top', '-20%');
+                        $(imgbg).css('left', '-20%');
+                    }, 400, oldpos, posImage);
+
+                    timeReMM = 500;
+                }
+
+                if(typeof timeOutDMM != 'undefined'){
+                    clearTimeout(timeOutDMM);
+                }
+
+                timeOutDMM = setTimeout(function (){
+                    disableMouseMove = false;
+                    mouse_old = undefined;
+                }, timeReMM);
+
+                var position = imgbg.position();
+                imgbg.css('top',  position.top  +  pad*2);
+                imgbg.css('left',  position.left +  pad);
+            });
+        });
+
+    </script>
+
+    <script src="js/logo.js"></script>
+
+</html>
