@@ -1,0 +1,28 @@
+{
+    "name": "Cao Thắng Student",
+    "version": "1.0",
+    "description": "",
+    "manifest_version": 2,
+    "permissions": ["<all_urls>","storage", "declarativeContent", "activeTab", "tabs", "alarms", "notifications"],
+    "background": {
+        "scripts": ["js/background.js"],
+        "persistent": false
+    },
+    "content_scripts": [
+        {
+          "matches": ["https://*.fb.com/*", "https://*.facebook.com/*"],
+          "css": ["css/style_content.css"],
+          "js": ["js/jquery.min.js", "js/content.js"]
+        }
+    ],
+    "page_action": {
+        "default_popup": "html/popup.html",
+        "default_icon": {
+            "16": "image/icon/16.png",
+            "32": "image/icon/32.png",
+            "48": "image/icon/48.png",
+            "128": "image/icon/128.png"
+          }
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  }
