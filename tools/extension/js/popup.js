@@ -1,11 +1,10 @@
-
 /// Load page
-const load_page = function (name){
+const load_page = function (name, ...args){
     $.ajax(name+".html",
         {
             success: function (data, status, xhr) {
                 $('#content').html(data);
-                Page[name]();
+                Page[name](args);
             }
         });
 }
@@ -14,9 +13,15 @@ const load_page = function (name){
 /// Status
 const initStatus = function (){
     $('#on-off-switch').change(function (){
-        chrome.storage.sync.set({"status" : this.checked}, function (){
-            refer_page();
-        });
+        chrome.runtime.sendMessage(
+            { 
+                action: 'status',
+                status: this.checked
+            },
+            function (data){
+                refer_page();
+            });
+
     });
 }
 
@@ -25,7 +30,48 @@ const initStatus = function (){
 const initLogin = function (){
     $('#login').click(function (){
         $('#loading').show();
+
+        chrome.runtime.sendMessage(
+            { 
+                action: 'login',
+                user: $('#username').val(),
+                pass: $('#password').val()
+            },
+            function (data){
+                if(data.status){
+                    $('#loading').hide();
+                    load_page('app', data.data);
+                } else {
+                    alert('Lỗi đăng nhập!');
+                }
+            });
     });
+}
+
+
+/// Relogin
+const initReLogin = function (){
+    $('#loading').show();
+
+    chrome.runtime.sendMessage(
+        { 
+            action: 'relogin'
+        },
+        function (data){
+            if(data.status){
+                load_page('app', data.data);
+            } else {
+                load_page('login');
+            }
+            $('#loading').hide();
+        });
+}
+
+
+/// App
+const initApp = function (...args){
+    let data = args[0][0];
+    $('#aliases').html(data["aliases"]);
 }
 
 
@@ -34,17 +80,24 @@ const initLogin = function (){
 /// ------------ Main ------------------------
 
 Page = {
-    "login" : initLogin,
-    "off" : function (){}
+    "login"     : initLogin,
+    "relogin"   : initReLogin,
+    "off"       : function (){},
+    "app"       : initApp
 };
 
 
 const refer_page = function (){
-    chrome.storage.sync.get("status", function (data){
+    chrome.storage.sync.get(["token", "status"], function (data){
         let page = 'off';
         if(data["status"]){
             page = "login";
             $("#on-off-switch").prop('checked', true);
+
+            if(data["token"]){
+                load_page("relogin");
+                return;
+            }
         } else {
             $("#on-off-switch").prop('checked', false);
         }

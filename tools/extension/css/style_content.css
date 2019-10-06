@@ -1,0 +1,87 @@
+.lds-hourglass {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+  }
+  .lds-hourglass:after {
+    content: " ";
+    display: block;
+    border-radius: 50%;
+    width: 0;
+    height: 0;
+    margin: 6px;
+    box-sizing: border-box;
+    border: 5px solid rgb(50, 42, 70);
+    border-color: rgb(50, 42, 70) transparent rgb(50, 42, 70) transparent;
+    animation: lds-hourglass 1.2s infinite;
+  }
+  @keyframes lds-hourglass {
+    0% {
+      transform: rotate(0);
+      animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+    }
+    50% {
+      transform: rotate(900deg);
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+    100% {
+      transform: rotate(1800deg);
+    }
+  }
+  
+
+._yuh_b_card {
+    margin: 5px;
+    padding: 10px;
+    border-top: 1px solid #e9ebee;
+    color: #90949c;
+}
+
+._yuh_b_card {
+    text-align: center;
+}
+
+.button-upd {
+    border: 1px solid #ccc;
+    color: #1c1e21;
+    padding: 3px;
+    background: #EBEDF0;
+}
+
+.button-upd:hover {
+    background: #E2EAF2;
+}
+
+.deltail {
+    position: relative;
+    float: right;
+    padding-top: 15px;
+    font-size: 10px;
+}
+
+.deltail > div {
+    display: inline-block;
+}
+
+.deltail > .line {
+    margin-top: 10px;
+    border-top: 1px solid #1c1e21;
+    width: 20px;
+    height: 2px;
+}
+
+.deltail > div[class]{
+    color: #1c1e21;
+}
+
+.cls-both {
+    clear: both;
+}
+
+.select {
+    display: inline-block;
+}
+
+select:disabled {
+    background: #E2EAF2;
+}

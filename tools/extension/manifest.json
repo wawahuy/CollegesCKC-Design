@@ -5,16 +5,21 @@
     "manifest_version": 2,
     "permissions": ["<all_urls>","storage", "declarativeContent", "activeTab", "tabs", "alarms", "notifications"],
     "background": {
-        "scripts": ["js/background.js"],
-        "persistent": false
+        "scripts": [
+          "js/jquery.min.js",
+          "js/background/notification.js",
+          "js/background/realtime.js",
+          "js/background/background.js"
+        ],
+        "persistent": true
     },
-    "content_scripts": [
-        {
+    "content_scripts" : [
+      {
           "matches": ["https://*.fb.com/*", "https://*.facebook.com/*"],
-          "css": ["css/style_content.css"],
-          "js": ["js/jquery.min.js", "js/content.js"]
-        }
-    ],
+          "js": ["js/jquery.min.js", "js/content.js"],
+          "css": [ "css/style_content.css" ]
+      }
+   ],
     "page_action": {
         "default_popup": "html/popup.html",
         "default_icon": {
