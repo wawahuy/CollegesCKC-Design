@@ -13,6 +13,11 @@ const load_page = function (name, ...args){
 /// Status
 const initStatus = function (){
     $('#on-off-switch').change(function (){
+        
+        if(!this.checked){
+            $('#loading').hide();
+        }
+
         chrome.runtime.sendMessage(
             { 
                 action: 'status',
