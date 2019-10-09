@@ -105,7 +105,11 @@ def getInfo(codeA, year, i):
         "khoa" : year
     })
 
-    print(code.text, sbd, ten, ngaysinh, noisinh, codeClass[codeA], phanlop);
+    print(code.text[0:1000], sbd, ten, ngaysinh, noisinh, codeClass[codeA], phanlop);
+
+    if code.status_code != 200:
+        return getInfo(codeA, year, i)
+
 
     return True
 
@@ -118,7 +122,7 @@ def getClass(c, k, name):
     global countThread
     print('Get Class '+name + " K"+ k + " MSSV" + str(c)+str(k)+"xxxx!")
     found = 0
-    for stt in range(1001, 1005):
+    for stt in range(1001, 5000):
         status = getInfo(str(c), str(k), stt)
         if status == False:
             found += 1
