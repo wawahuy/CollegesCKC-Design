@@ -77,6 +77,26 @@ const initReLogin = function (){
 const initApp = function (...args){
     let data = args[0][0];
     $('#aliases').html(data["aliases"]);
+
+    var show_cache = () => chrome.runtime.sendMessage(
+        { 
+            action: 'cache_mem'
+        },
+        function (data){
+                $('#gc').html(data);
+        });
+
+    $('#free-cache').click(function (){
+        chrome.runtime.sendMessage(
+            { 
+                action: 'cache_free'
+            },
+            function (data){
+                show_cache();
+            });
+    });
+
+    show_cache();
 }
 
 

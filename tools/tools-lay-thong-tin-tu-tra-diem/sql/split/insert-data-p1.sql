@@ -174,7 +174,7 @@ INSERT INTO `classes` (`id`, `name`, `id_course`, `id_industry`, `created_at`, `
 -- Đang đổ dữ liệu cho bảng `courses`
 --
 
-INSERT INTO `courses` (`id`, `course`, `detail`, `created_at`, `updated_at`) VALUES
+INSERT INTO `courses` (`id`, `code`, `name`, `created_at`, `updated_at`) VALUES
 (1, 17, 'Khóa 17', '2019-10-08 15:07:21', '2019-10-08 15:07:21'),
 (2, 19, 'Khóa 19', '2019-10-08 15:15:38', '2019-10-08 15:15:38'),
 (3, 18, 'Khóa 18', '2019-10-08 15:15:39', '2019-10-08 15:15:39');
@@ -206,25 +206,6 @@ INSERT INTO `industries` (`id`, `code`, `name`, `deleted_at`, `created_at`, `upd
 (17, '0310', 'CĐ Kế Toán', NULL, '2019-10-08 15:07:11', '2019-10-08 15:07:11'),
 (18, '0308', 'CĐ Điện Tử, TT', NULL, '2019-10-08 15:07:11', '2019-10-08 15:07:11'),
 (19, '0300', 'CĐ Tự Động Hóa', NULL, '2019-10-08 15:07:12', '2019-10-08 15:07:12');
-
--- --------------------------------------------------------
-
-
---
--- Đang đổ dữ liệu cho bảng `migrations`
---
-
-INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-(21, '2019_09_30_192817_create_admins_table', 1),
-(22, '2019_10_01_020625_create_industries_table', 1),
-(23, '2019_10_06_181917_create_courses_table', 1),
-(24, '2019_10_06_182009_create_classes_table', 1),
-(25, '2019_10_06_182041_create_images_table', 1),
-(26, '2019_10_06_182042_create_profiles_table', 1),
-(27, '2019_10_06_182212_create_likes_table', 1),
-(28, '2019_10_06_182320_create_fb_users_table', 1),
-(29, '2019_10_06_182321_create_comments_table', 1),
-(30, '2019_10_06_182347_create_history_searches_table', 1);
 
 -- --------------------------------------------------------
 
