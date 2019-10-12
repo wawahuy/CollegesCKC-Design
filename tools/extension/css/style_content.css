@@ -46,6 +46,16 @@
     color: #1c1e21;
     padding: 3px;
     background: #EBEDF0;
+    opacity: 1;
+    transition: 0.5s opacity;
+}
+
+.button-upd:disabled {
+  opacity: 0;
+  width: 0;
+  padding: 0;
+  margin: 0;
+  height: 0;
 }
 
 .button-upd:hover {

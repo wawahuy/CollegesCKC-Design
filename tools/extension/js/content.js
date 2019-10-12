@@ -63,13 +63,13 @@ var applyResponseGetting = function (id, data){
         CreateOption("ops_codename_", id, {
             "-1"  : "mssv + tên",
         }, 87, true) +
-        `<button class='button-upd'>cập nhật</button>
+        `<button class='button-upd' id='upd_${id}' disabled>cập nhật</button>
          <div class='deltail'>
             <div>cập nhật</div>
-            <div class='date'>2:04SA 07/19/2019</div>
+            <div class='date'>--</div>
             <div class='line'></div>
             <div>bởi</div>
-            <div class='author'>YUH</div>
+            <div class='author'>--</div>
          </div>
          <div class='cls-both'></div>
         `
@@ -92,17 +92,59 @@ var applyResponseGetting = function (id, data){
     };
 
     var courseDom = $('#ops_course_'+id);
-    courseDom.after("<div class='lds-hourglass'></div>");
-    courseDom.prop( "disabled", true );
+    
+    var updateOptions = ((d, data) => {
+        $('#yuh_test_'+id).css('border', '1px solid green');
+        d.find('.author').html(data.admin_aliases);
+        d.find('.date').html(data.updated_at);
+        $('#upd_'+id).next('.lds-hourglass').remove();
+        d.find('.author').next('span').remove();
+    }).bind(null, d)
 
-    chrome.runtime.sendMessage(
-        { 
-            action: 'get_course'
-        },cll.bind({
-            obj: courseDom,
-            id,
-            index: 0
-        }));
+
+    $('#upd_'+id).click(() => {
+        $('#upd_'+id).after("<div class='lds-hourglass'></div>");
+        chrome.runtime.sendMessage(
+            { 
+                action: 'update_fb_uid',
+                data: {
+                    'fb_uid': id,
+                    'profile_id': $('#ops_codename_'+id).val()
+                }
+            }, (data) => {
+                updateOptions(data[id]);
+            });
+    });
+
+        
+    if(!!data){
+        updateOptions(data);
+        $('#'+nameID[0] + id).append(`<option name='${data.course_code}' selected>${data.course_name}</option>`);
+        $('#'+nameID[1] + id).append(`<option name='${data.industry_code}' selected>${data.industry_code} - ${data.industry_name}</option>`);
+        $('#'+nameID[2] + id).append(`<option name='${data.class_id}' selected>${data.class_name}</option>`);
+        $('#'+nameID[3] + id).append(`<option name='${data.id}' selected>${data.code} - ${data.name}</option>`);
+        nameID.forEach(e => $('#'+ e + id).prop('disabled', true));
+
+        $('#upd_'+id).after(`<button id="del_${id}" class="button-upd">Xóa</button>`);
+        $('#del_'+ id).click(() => applyResponseGetting(id, null));
+    }
+    else {
+        d.find('.deltail').append('<span>Chưa có thông tin!</span>');
+
+        courseDom.after("<div class='lds-hourglass'></div>");
+        courseDom.prop( "disabled", true );
+
+        chrome.runtime.sendMessage(
+            { 
+                action: 'get_course'
+            },cll.bind({
+                obj: courseDom,
+                id,
+                index: 0
+            }));
+    }
+
+    
 
     $('#sea_' + id).keydown(function (){
         var t = $(this).next().next();
@@ -116,6 +158,7 @@ var applyResponseGetting = function (id, data){
 
         t.show();
     });
+
 
     nameID.forEach(element => {
         $('#' + element + id).change(function (){
@@ -131,6 +174,9 @@ var applyResponseGetting = function (id, data){
                 }
             }
 
+            if(index == 3){
+                $('#upd_'+id).prop('disabled', $('#ops_codename_'+id).val()=='-1');
+            }
 
             if(t.val() != "-1" && index < nameID.length - 1){
                 var i2 = index + 1;
@@ -193,31 +239,9 @@ var applyResponseGetting = function (id, data){
             }
         });
 
-        // $('#' + element + id).click(function (){
-        //     var t = $(this);
-
-        //     if(t.attr('data-load') == "1"){
-        //         return;
-        //     }
-
-        //     t.after("<div class='lds-hourglass'></div>");
-        //     t.prop( "disabled", true );
-
-        //     var r = /^(?<name>.*)_(?<id>[\d]+)$/g.exec(t.attr('id'));
-        //     var name = r.groups['name'];
-        //     var id = r.groups['id'];
-        //     var index = nameID.indexOf(name + '_');
-
-        //     if(index < nameID.length){
-        //         for(i=0; i<nameID.length; i++){
-        //             $('#' + nameID[i] + id).prop( "disabled", true );
-        //         }
-        //     }
-        // });
+        
     });
 
-
-    
 }
 
 var findCardProfile = function (){
@@ -229,6 +253,7 @@ var findCardProfile = function (){
             var uid = /user\.php\?id=(?<uid>[\d\D]+)&/g.exec(link.attr('data-hovercard')).groups.uid;
             get_uid += uid+"|";
             $(this).attr("yuh_test", true);
+            $(this).attr('id', 'yuh_test_'+uid);
             $(this).append(htmlCardProfile(uid));
         } catch (e){
         }

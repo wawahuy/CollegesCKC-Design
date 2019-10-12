@@ -17,7 +17,7 @@ class CacheAPI {
     return this;
   }
 
-  getData(res, path, data = {}){
+  getData(res, path, data = {}, method = 'GET'){
     var obj = this.find(path, data);
 
     if(obj.status){
@@ -30,11 +30,11 @@ class CacheAPI {
           obj.status = true;
           obj.data = data.data;
         }
-      }).bind(this, obj));
-      this.getData(res, path, data);
+      }).bind(this, obj), method, data);
+      this.getData(res, path, data, method);
     }
     else {
-      setTimeout(this.getData.bind(this), 250, res, path, data);
+      setTimeout(this.getData.bind(this), 250, res, path, data, method);
     }
   }
 
@@ -73,8 +73,10 @@ const Init = function (){
     });
 }
 
-const RequestAPI = function(path, response){
+const RequestAPI = function(path, response, method = "GET", data = null){
   $.ajax({
+    type: method,
+    data: data,
     url: HOST+path,
     headers: {
         'x-api-token': token
@@ -159,6 +161,15 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
 
     case "get_profile":
         (new CacheAPI()).getData(res, `api/profile/get_by_id_class_${req.data.cls}?short=true`);
+      break;
+
+    case "update_fb_uid":
+        RequestAPI('api/profile/update_fb_uid/'+req.data.profile_id, function (data){
+          if(data.status)
+            res(data.data);
+        }, 'POST', {
+          fb_uid: req.data.fb_uid
+        });
       break;
 
     case "cache_mem":
