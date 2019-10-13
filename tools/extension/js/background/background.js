@@ -1,6 +1,7 @@
 'use strict';
 
-const HOST = 'http://localhost:8000/';
+//const HOST = 'http://localhost:8000/';
+const HOST = 'https://caothangstudent.herokuapp.com/';
 const WS = 'ws://localhost:8080'
 var   token;
 var   realtime;
@@ -142,8 +143,9 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
 
     case "find_by_uid":
         RequestAPI('api/profile/uid_fb/'+req.data, function (data){
-          if(data.status)
+          if(data.status){
             res(data.data);
+          }
         });
       break;
 

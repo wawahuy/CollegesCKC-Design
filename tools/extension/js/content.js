@@ -171,18 +171,27 @@ var applyResponseGetting = function (id, data){
             return;
         }
 
-        clearTimeout(handleTimeoutSearch);
-        handleTimeoutSearch = setTimeout(() => {
+        var find = (st) => {
+
+            t.attr('yuh-id', st);
 
             chrome.runtime.sendMessage(
                 { 
                     action: 'find_by_name',
                     data : {
-                        start: 0,
+                        start: st,
                         name: s.val(),
                         num: limitSearch
                     }
                 }, (data) => {
+
+                    var next = true;
+
+                    if(data.length == 0){
+                        next = false;
+                        data = currentDataSearch;
+                    }
+
                     currentDataSearch = data;
                     var code =  `
                     <span onclick='this.parentNode.style.display = "none"'>x</span>
@@ -209,19 +218,34 @@ var applyResponseGetting = function (id, data){
                         </tr>`;                    
                     })
 
-                    code += `</table></div>
-                    <div class='s-p-n'><span class='se-next'>Kế tiếp</span></div>
-                    `;
+                    code += `</table></div><div class='s-p-n'>
+                    ${t.attr('yuh-id')>0 ? "<span class='se-prev'>quay lại</span> | " : ""}
+                    ${next ? "<span class='se-next'>kế tiếp</span>" : ""}
+                    </div>`;
 
                     t.html(code);
+
+                    $('.se-prev').click(() => {
+                        t.find('table').before().append("<div class='lds-hourglass fl'></div>");
+                        $('.se-prev').prop('disabled', true);
+                        find(Number(t.attr('yuh-id'))-limitSearch);
+                    });
+
+                    $('.se-next').click(() => {
+                        t.find('table').before().append("<div class='lds-hourglass fl'></div>");
+                        $('.se-next').prop('disabled', true);
+                        find(Number(t.attr('yuh-id'))+limitSearch);
+                    });
 
                     $('tr').click(function (){
                         currentDataSearch[$(this).attr('yuh-id')].fb_uid = true;
                         applyResponseGetting(id, currentDataSearch[$(this).attr('yuh-id')]);
                     });
                 });
+        }
 
-        }, 500);
+        clearTimeout(handleTimeoutSearch);
+        handleTimeoutSearch = setTimeout(find, 500, 0);
 
         if(t.find('.lds-hourglass').length == 0){
             t.html(`
@@ -324,12 +348,27 @@ var findCardProfile = function (){
     $('div[id^="pagelet_timeline_app_collection_"]').find('li:not([yuh_test])').each(function (){
         var link = $(this).find("a[data-hovercard^='/'");
         try {
-            var uid = /user\.php\?id=(?<uid>[\d\D]+)&/g.exec(link.attr('data-hovercard')).groups.uid;
+            var uid = /\.php\?id=(?<uid>[\d\D]+)&/g.exec(link.attr('data-hovercard')).groups.uid;
             get_uid += uid+"|";
             $(this).attr("yuh_test", true);
             $(this).attr('id', 'yuh_test_'+uid);
             $(this).append(htmlCardProfile(uid));
         } catch (e){
+        }
+    });
+
+    
+
+    $('ul[id^="typeahead_list_"]').find('li:not([yuh_test])').each(function (){
+        var link = $(this).find("a[data-hovercard^='/'");
+        try {
+            var uid = /\.php\?id=(?<uid>[\d\D]+)&/g.exec(link.attr('data-hovercard')).groups.uid;
+            get_uid += uid+"|";
+            $(this).attr("yuh_test", true);
+            $(this).attr('id', 'yuh_test_'+uid);
+            $(this).append(htmlCardProfile(uid));
+        } catch (e){
+            console.log(e);
         }
     });
 
@@ -354,5 +393,7 @@ var init = function () {
             clearTimeout(handleTimeout);
             handleTimeout = setTimeout(findCardProfile, 100);
         });
+
+        setInterval(findCardProfile, 1000);
     });
 }

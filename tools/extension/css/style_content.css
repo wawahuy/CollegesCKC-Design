@@ -146,12 +146,13 @@ select:disabled {
   z-index: 2;
   background-color: #fff;
   padding: 5px;
-  width: 100%;
+  width: 400px;
   border: 1px solid #ccc;
   box-shadow: 1px 1px 10px #ccc;
   min-height: 15px;
   text-align: left;
   display: none;
+  width: 120%;
 }
 
 .result-sea > span {
@@ -178,6 +179,8 @@ select:disabled {
 }
 
 .tb-se table {
+  width: 100%;
+  height: 300px;
   border-collapse:collapse;
 }
 
@@ -214,7 +217,12 @@ select:disabled {
   padding: 10px;
 }
 
-.se-next {
+.se-next, .se-prev {
   cursor: pointer;
   font-weight: bold;
+}
+
+.fl {
+  left: 100%;
+  transform: translate(-100%, 0);
 }
