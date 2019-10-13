@@ -1,4 +1,7 @@
 var handleTimeout;
+var handleTimeoutSearch;
+var limitSearch = 10;
+var currentDataSearch;
 var nameID = ['ops_course_', 'ops_industry_', 'ops_class_', 'ops_codename_'];
 
 chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
@@ -20,7 +23,7 @@ var htmlCardProfile = function (id){
 }
 
 var CreateOption = function (idname, id, opts, width, disabled = false){
-    var code = `<div class="select" style='width: ${width}px'}><select id="${idname + id}" style='width: ${width}px'} data-load="0"  ${disabled ? 'disabled' : ''}>`;
+    var code = `<div class="select" style='width: ${width}px'}><select id="${idname + id}" style='width: ${width}px' data-load="0"  ${disabled ? 'disabled' : ''}>`;
     Object.keys(opts).forEach(e => {
         code += `<option value="${e}">${opts[e]}</option>`;
     });
@@ -34,13 +37,8 @@ var applyResponseGetting = function (id, data){
         `   
             <div class="rela">
                 <input type="text" name="sea_${id}" id="sea_${id}" class="inp-sea" placeholder="Nhập tên tìm kiếm..."/> 
+                [<a id='supportSearch${id}'>?</a>]
                 `
-                +
-                CreateOption("select_search", id, {
-                    "0"  : "Tìm tên",
-                    "1"  : "Tìm lớp",
-                    "2"  : "Tìm MSSV"
-                }, 87)
                 +
                 `
                 <div class="result-sea" id="result_sea_${id}"></div>
@@ -74,6 +72,18 @@ var applyResponseGetting = function (id, data){
          <div class='cls-both'></div>
         `
     );
+
+    $('#supportSearch'+id).click(function () {
+        alert(`
+            - Tìm nhiều phần ngăn cách bởi dấu phẩy
+            VD: Nguyen, Huy
+            - Tìm tên bắt đầu bằng Ten:ten
+            VD: Nguyen, Ten:Huy
+            - Kèm MSSV bắt đầu bằng MSSV:mssv
+            VD: MSSV:0306171248
+        `);
+    });
+    
 
     var cll = function (data){
         this.obj.next(".lds-hourglass").remove();
@@ -119,14 +129,18 @@ var applyResponseGetting = function (id, data){
         
     if(!!data){
         updateOptions(data);
-        $('#'+nameID[0] + id).append(`<option name='${data.course_code}' selected>${data.course_name}</option>`);
-        $('#'+nameID[1] + id).append(`<option name='${data.industry_code}' selected>${data.industry_code} - ${data.industry_name}</option>`);
-        $('#'+nameID[2] + id).append(`<option name='${data.class_id}' selected>${data.class_name}</option>`);
-        $('#'+nameID[3] + id).append(`<option name='${data.id}' selected>${data.code} - ${data.name}</option>`);
+        $('#'+nameID[0] + id).append(`<option value='${data.course_code}' selected>${data.course_name}</option>`);
+        $('#'+nameID[1] + id).append(`<option value='${data.industry_code}' selected>${data.industry_code} - ${data.industry_name}</option>`);
+        $('#'+nameID[2] + id).append(`<option value='${data.class_id}' selected>${data.class_name}</option>`);
+        $('#'+nameID[3] + id).append(`<option value='${data.id}' selected>${data.code} - ${data.name}</option>`);
         nameID.forEach(e => $('#'+ e + id).prop('disabled', true));
 
-        $('#upd_'+id).after(`<button id="del_${id}" class="button-upd">Xóa</button>`);
-        $('#del_'+ id).click(() => applyResponseGetting(id, null));
+        if(!!data.fb_uid){
+            $('#upd_'+id).prop('disabled', $('#ops_codename_'+id).val()=='-1');
+        } else {
+            $('#upd_'+id).after(`<button id="del_${id}" class="button-upd">Xóa</button>`);
+            $('#del_'+ id).click(() => applyResponseGetting(id, null));
+        }
     }
     else {
         d.find('.deltail').append('<span>Chưa có thông tin!</span>');
@@ -146,8 +160,68 @@ var applyResponseGetting = function (id, data){
 
     
 
-    $('#sea_' + id).keydown(function (){
-        var t = $(this).next().next();
+    $('#sea_' + id).keyup(function (){
+
+        var s = $(this);
+        var t = $(`#result_sea_${id}`);
+
+        if($(this).val() == ""){
+            t.html('');
+            t.hide();
+            return;
+        }
+
+        clearTimeout(handleTimeoutSearch);
+        handleTimeoutSearch = setTimeout(() => {
+
+            chrome.runtime.sendMessage(
+                { 
+                    action: 'find_by_name',
+                    data : {
+                        start: 0,
+                        name: s.val(),
+                        num: limitSearch
+                    }
+                }, (data) => {
+                    currentDataSearch = data;
+                    var code =  `
+                    <span onclick='this.parentNode.style.display = "none"'>x</span>
+                    
+                    <div class='tb-se'>
+                        <table>
+                            <tr>
+                                <th>Khóa</th>
+                                <th>Nghành</th>
+                                <th>Lớp</th>
+                                <th>Tên</th>
+                                <th>MSSV</th>
+                            </tr>
+                        `;
+
+                    data.forEach((e, i) => {
+                        code += `
+                        <tr yuh-id='${i}' ${ e.fb_uid != null ? "style='border: 1px solid green;'" : ""}>
+                            <td>${e.course_code}</td>
+                            <td>${e.industry_name}</td>
+                            <td>${e.class_name}</td>
+                            <td>${e.name}</td>
+                            <td>${e.code}</td>
+                        </tr>`;                    
+                    })
+
+                    code += `</table></div>
+                    <div class='s-p-n'><span class='se-next'>Kế tiếp</span></div>
+                    `;
+
+                    t.html(code);
+
+                    $('tr').click(function (){
+                        currentDataSearch[$(this).attr('yuh-id')].fb_uid = true;
+                        applyResponseGetting(id, currentDataSearch[$(this).attr('yuh-id')]);
+                    });
+                });
+
+        }, 500);
 
         if(t.find('.lds-hourglass').length == 0){
             t.html(`

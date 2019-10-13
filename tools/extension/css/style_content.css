@@ -97,7 +97,6 @@ select:disabled {
 }
 
 .inp-sea {
-  width: 65%;
   border: 1px solid #ccc;
   padding: 3px;
   left: 0;
@@ -170,4 +169,52 @@ select:disabled {
   font-size: 18px;
   font-weight: bold;
   transform: translate(-100%, 0);
+  background-color: #fff;
+}
+
+
+.tb-se {
+  width: 100%;
+}
+
+.tb-se table {
+  border-collapse:collapse;
+}
+
+.tb-se table th {
+  background-color: #ddd;
+  padding: 5px;
+}
+
+.tb-se table td {
+  border-right: #ddd 1px solid;
+  padding: 5px;
+}
+
+
+.tb-se table td:nth-child(0) {
+  border-right: none;
+}
+
+.tb-se table tr {
+  cursor: pointer;
+}
+
+.tb-se table tr:nth-child(odd) {
+  background-color:  rgb(248, 248, 248);
+}
+
+
+.tb-se table tr:hover {
+  background-color:  rgb(229, 234, 248);
+}
+
+.s-p-n {
+  border-top: 1px #ccc solid;
+  padding: 10px;
+}
+
+.se-next {
+  cursor: pointer;
+  font-weight: bold;
 }

@@ -172,6 +172,15 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         });
       break;
 
+    case "find_by_name":
+        RequestAPI(`api/profile/find_by_name/${req.data.start}_${req.data.num}`, function (data){
+          if(data.status)
+            res(data.data);
+        }, 'POST', {
+          name: req.data.name
+        });
+      break;
+
     case "cache_mem":
         res(memorySizeOf(CacheAPI.instance));
       break;
