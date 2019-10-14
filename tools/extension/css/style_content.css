@@ -39,7 +39,8 @@
 
 ._yuh_b_card {
     text-align: center;
-}
+    position: relative;
+  }
 
 .button-upd {
     border: 1px solid #ccc;
@@ -225,4 +226,59 @@ select:disabled {
 .fl {
   left: 100%;
   transform: translate(-100%, 0);
+}
+
+
+.show-del {
+  position: absolute;
+  min-width: 200px;
+  left: 50%;
+  top: -50%;
+  transform: translate(-50%, -100%);
+  box-shadow: 1px 1px 7px rgb(43, 40, 40);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  color: #90949c;
+  background-color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: -99999;
+}
+
+.show-del::after, .current-profile::after {
+  content: " ";
+  position: absolute;
+  top: 100%; 
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #ccc transparent transparent transparent;
+}
+
+div[id^='yuh_profile_']:hover .show-del {
+  opacity: 1;
+  z-index: 100;
+}
+
+.current-profile {
+  position: absolute;
+  z-index: 100;
+  background-color: white;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 1px 1px 7px rgb(43, 40, 40);
+  border-radius: 10px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  text-align: center;
+  width: 350px;
+}
+
+
+#fbProfileCover .show-del {
+  top: 0;
+  transition: none;
 }
