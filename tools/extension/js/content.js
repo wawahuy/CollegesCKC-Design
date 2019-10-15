@@ -10,6 +10,10 @@ chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
         case 'init':
             init();
             break;
+
+        case 'init_profile':
+            initProfileCurrent();
+            break;
     }
 });
 
@@ -31,10 +35,11 @@ var CreateOption = function (idname, id, opts, width, disabled = false){
     return code;
 }
 
+
 var applyResponseGetting = function (id, data){
     d = $(`#yuh_profile_${id}`);
     d.html(
-        `   
+        `   <div class="show-del">Chưa có thông tin!</div>
             <div class="rela">
                 <input type="text" name="sea_${id}" id="sea_${id}" class="inp-sea" placeholder="Nhập tên tìm kiếm..."/> 
                 [<a id='supportSearch${id}'>?</a>]
@@ -76,11 +81,12 @@ var applyResponseGetting = function (id, data){
     $('#supportSearch'+id).click(function () {
         alert(`
             - Tìm nhiều phần ngăn cách bởi dấu phẩy
-            VD: Nguyen, Huy
-            - Tìm tên bắt đầu bằng Ten:ten
-            VD: Nguyen, Ten:Huy
-            - Kèm MSSV bắt đầu bằng MSSV:mssv
-            VD: MSSV:0306171248
+            - Tìm tên bắt đầu bằng ten:.....
+            - Tìm lớp bắt đầu bằng lop:.....
+            - Tìm họ bắt đầu bằng  ho:......
+            - Tìm khóa học bắt đầu bằng khoa:......
+            VD: muốn tìm chính xác Nguyễn Gia Huy
+                    ho:nguyễn, ten:huy, lop:cntt, khoa:17
         `);
     });
     
@@ -104,11 +110,16 @@ var applyResponseGetting = function (id, data){
     var courseDom = $('#ops_course_'+id);
     
     var updateOptions = ((d, data) => {
-        $('#yuh_test_'+id).css('border', '1px solid green');
         d.find('.author').html(data.admin_aliases);
         d.find('.date').html(data.updated_at);
         $('#upd_'+id).next('.lds-hourglass').remove();
         d.find('.author').next('span').remove();
+
+        if(!!data.fb_uid){
+            $('#yuh_test_'+id).css('border', '1px solid red');
+        } else {
+            $('#yuh_test_'+id).css('border', '1px solid green');
+        }
     }).bind(null, d)
 
 
@@ -135,9 +146,22 @@ var applyResponseGetting = function (id, data){
         $('#'+nameID[3] + id).append(`<option value='${data.id}' selected>${data.code} - ${data.name}</option>`);
         nameID.forEach(e => $('#'+ e + id).prop('disabled', true));
 
+        d.find('.show-del').html(`
+            <table>
+                <tr><td><b>Tên:</b></td><td>${data.name}</td></tr>
+                <tr><td><b>MSSV:</b></td><td>${data.code}</td></tr>
+                <tr><td><b>Khóa:</b></td><td>${data.course_name}</td></tr>
+                <tr><td><b>Nghành:</b></td><td>${data.industry_name}</td></tr>
+                <tr><td><b>Lớp:</b></td><td>${data.class_name}</td></tr>
+            </table>
+        `);
+
+
         if(!!data.fb_uid){
+            $('#yuh_test_'+id).css('border', '1px solid red');
             $('#upd_'+id).prop('disabled', $('#ops_codename_'+id).val()=='-1');
         } else {
+            $('#yuh_test_'+id).css('border', '1px solid green');
             $('#upd_'+id).after(`<button id="del_${id}" class="button-upd">Xóa</button>`);
             $('#del_'+ id).click(() => applyResponseGetting(id, null));
         }
@@ -160,7 +184,7 @@ var applyResponseGetting = function (id, data){
 
     
 
-    $('#sea_' + id).keyup(function (){
+    var searchAc = function (){
 
         var s = $(this);
         var t = $(`#result_sea_${id}`);
@@ -244,6 +268,7 @@ var applyResponseGetting = function (id, data){
                 });
         }
 
+
         clearTimeout(handleTimeoutSearch);
         handleTimeoutSearch = setTimeout(find, 500, 0);
 
@@ -255,7 +280,9 @@ var applyResponseGetting = function (id, data){
         }
 
         t.show();
-    });
+    };
+
+    $('#sea_' + id).keyup(searchAc);
 
 
     nameID.forEach(element => {
@@ -264,7 +291,7 @@ var applyResponseGetting = function (id, data){
             var r = /^(?<name>.*)_(?<id>[\d]+)$/g.exec(t.attr('id'));
             var name = r.groups['name'];
             var id = r.groups['id'];
-            var index = nameID.indexOf(name + '_');
+            var index = nameID.indexOf(name+'_');
 
             if(index < nameID.length){
                 for(i=index+1; i<nameID.length; i++){
@@ -342,6 +369,67 @@ var applyResponseGetting = function (id, data){
 
 }
 
+
+var applyResponseGettingCurrent = function () {
+    setTimeout(applyResponseGettingCurrent, 1000);
+
+    try {
+        if($('#fbProfileCover').attr('yuh-load'))
+            return;
+
+        var id = $('a[data-referrerid]').attr('data-referrerid');
+        $('#fbProfileCover').attr('yuh-load', true);
+        $('#fbProfileCover').append(`
+            <div id="yuh_profile_${id}" class="current-profile">
+                Getting...
+            </div>
+        `);
+
+        var hasMouse = false;
+        var d = $('#yuh_profile_'+id);
+        var mX = 0;
+        var mY = 0;
+        var xMouse;
+        var yMouse;
+
+        d.mousedown((e) => {
+            d.css('cursor', 'move');
+            hasMouse = true;
+            xMouse = e.pageX;
+            yMouse = e.pageY;
+        });
+        
+        d.mouseup(() => {
+            d.css('cursor', 'auto');
+            hasMouse = false;
+        });
+
+        $(document).mousemove((e) => {
+            if(!hasMouse)
+                return;
+
+            mX += e.pageX - xMouse;
+            mY += e.pageY - yMouse;
+            
+            d.css('margin-left', mX + 'px');
+            d.css('margin-top', mY + 'px');
+            xMouse = e.pageX;
+            yMouse = e.pageY;
+        });
+
+        
+        chrome.runtime.sendMessage(
+            { 
+                action: 'find_by_uid',
+                data: id
+            },
+            function (data){
+                applyResponseGetting(id, data[id]);
+            });
+    } catch(e){}
+
+}
+
 var findCardProfile = function (){
     var get_uid = "";
 
@@ -396,4 +484,10 @@ var init = function () {
 
         setInterval(findCardProfile, 1000);
     });
+}
+
+var initProfileCurrent = function () {
+    $(document).ready(function (){
+        applyResponseGettingCurrent();
+    });    
 }

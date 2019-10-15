@@ -1,8 +1,10 @@
 'use strict';
 
-//const HOST = 'http://localhost:8000/';
-const HOST = 'https://caothangstudent.herokuapp.com/';
+const HOST = 'http://localhost:8000/';
+//const HOST = 'https://caothangstudent.herokuapp.com/';
 const WS = 'ws://localhost:8080'
+const VERSION = chrome.runtime.getManifest().version;
+
 var   token;
 var   realtime;
 var   status;
@@ -44,14 +46,14 @@ class CacheAPI {
       this.data[path] = [];
     }
 
-    var obj = false;
+    var obj = undefined;
     this.data[path].forEach(element => {
       if(element.cst_data == JSON.stringify(data)){
         obj = element;
       }
     });
 
-    if(!obj){
+    if(typeof obj=="undefined"){
       obj = {
         status: false,
         isload: true,
@@ -75,6 +77,7 @@ const Init = function (){
 }
 
 const RequestAPI = function(path, response, method = "GET", data = null){
+
   $.ajax({
     type: method,
     data: data,
@@ -128,6 +131,12 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         RequestAPI('api/token?key='+token, function (data){
           if(!data.status){
             token = undefined;
+            
+            if(data.version != VERSION){
+              alert('Cái Cao Thắng Student xưa như quả đất rồi pull git về, rồi refresh lại cái extensions nhe!');
+              return;
+            }
+
             chrome.storage.sync.set({"token": null}, function (){});
           }
           res(data);
@@ -198,11 +207,18 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
 
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (IsPageFBFriends(tab.url) && changeInfo.status === 'complete' && IsTrue(status)) {
+  if(changeInfo.status === 'complete' && IsTrue(status)) {
+
+      if (IsPageFBFriends(tab.url)){
         ///chrome.tabs.insertCSS(tabId, {file:"css/style_content.css"});
         ///chrome.tabs.executeScript(tabId, {file: "js/jquery.min.js"});
         ///chrome.tabs.executeScript(tabId, {file: "js/content.js"});
         chrome.tabs.sendMessage(tabId, {action: "init"});
+      }
+
+      
+      chrome.tabs.sendMessage(tabId, {action: "init_profile"});
+
     }
 });
 
