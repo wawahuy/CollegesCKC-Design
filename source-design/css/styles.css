@@ -72,7 +72,7 @@
 /*-----------INDEX----------*/
 /*-----------------header*/
 body{
-    background-color:black;
+    background-color:rgb(255, 255, 255);
     width: 98%;
 }
 .cf:before,
@@ -137,7 +137,7 @@ body{
 /* Dropdown */
 .submenu {
   position: absolute;
-  width: 200px;
+  width: 350px;
   left: 50%; margin-left: -100px;
   transform: skewX(-25deg);
   transform-origin: left top;
@@ -229,6 +229,7 @@ body{
 }
 .overlay {
   top:20px;
+  border-radius: 50%;
   text-align: center;
   position: absolute;
   bottom: 100%;
@@ -239,7 +240,7 @@ body{
   width: 226px;
   height:0;
   transition: .5s ease;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .carousel-caption:hover .overlay {
