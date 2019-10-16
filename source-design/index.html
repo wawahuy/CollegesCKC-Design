@@ -17,13 +17,13 @@
         <script src="js/bootstrap.min.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/all.js"></script>
         <script defer src="https://use.fontawesome.com/releases/v5.11.2/js/v4-shims.js"></script>
+        <script src="js/TextEffect.js"></script>
         
 
     </head>
 
     <body>
-        <div class="row">
-        <ul class="menu cf">
+        <!--<ul class="menu cf">
             <li style="background-color: rgb(255, 255, 255);"><a href="" style="color: tomato;">Trang chủ</a></li>
             <li>
               <a href="">Khóa</a>
@@ -50,13 +50,45 @@
                 </ul>	
             </li>
             <li><a href="">Bảng xếp hạng</a></li>
-          </ul> 
-        </div>
-        <div class="row">
-            <div class="form-group" style="margin: -20px auto 5px auto;">
-              <input type="text" class="form-control" name="" id="" placeholder="Tìm Kiếm...">
+          </ul> -->
+        <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
+          <nav style="width: 100%; text-align: center;margin-top: -50px;">
+            <ul id="main">
+              <li>Trang chủ</li>
+              <li>Ngành
+                <ul class="drop">
+                    <div>
+                    <li>Kế toán</li>
+                    <li>Công nghệ thông tin</li>
+                    <li>Cơ khí</li>
+                    <li>Khác</li>
+                    </div>
+                  </ul>
+              </li>
+              <li>Khóa
+                <ul class="drop">
+                  <div>
+                  <li>17</li>
+                  <li>18</li>
+                  <li>19</li>
+                  </div>
+                </ul>
+              </li>
+              <li>Bảng xếp hạng</li>
+              <div id="marker"></div>
+            </ul>
+          </nav>
+          <div class="word"></div>
+            <div class="search">
+                <input type="checkbox" id="trigger" class="search__checkbox" />
+                <label class="search__label-init" for="trigger"></label>
+                <label class="search__label-active" for="trigger"></label>
+                <div class="search__border"></div>
+                <input type="text" class="search__input" placeholder="Nhập tên một ai đó..."/>
+                <div class="search__close"></div>
             </div>
-        </div>
         <div class="NewProfile row" style="margin:2% auto auto auto; text-align: center;">
             <hr>
             <h2 style="width:100%;color: beige;">VỪA CẬP NHẬT</h2>
