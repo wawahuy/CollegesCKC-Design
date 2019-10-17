@@ -1,5 +1,5 @@
 var
-  words = ['Xin Chào !!!','Bạn muốn hết FA???','Tìm một bạn trai để quan tâm???','Một bạn gái để chăm sóc???','Hãy tìm kiếm bằng công cụ của chúng tui :))'],
+  words = ['Xin Chào !!!','Kiếp FA cứ theo đuổi bạn???','Muốn một bạn trai để được quan tâm???','Một cô gái để chăm sóc???','Hãy tìm kiếm bằng công cụ của chúng tôi :))'],
   part,
   i = 0,
   offset = 0,
