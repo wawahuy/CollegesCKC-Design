@@ -15,9 +15,13 @@
     },
     "content_scripts" : [
       {
+        "matches": ["https://*/*", "https://*/*"],
+        "js": ["js/jquery.min.js", "js/admin.js"],
+        "css": [ "css/style_content.css" ]
+      },
+      {
           "matches": ["https://*.fb.com/*", "https://*.facebook.com/*"],
-          "js": ["js/jquery.min.js", "js/content.js"],
-          "css": [ "css/style_content.css" ]
+          "js": ["js/content.js"]
       }
    ],
     "page_action": {

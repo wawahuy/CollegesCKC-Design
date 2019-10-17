@@ -4,19 +4,6 @@ var limitSearch = 10;
 var currentDataSearch;
 var nameID = ['ops_course_', 'ops_industry_', 'ops_class_', 'ops_codename_'];
 
-chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
-    var data = message.data;
-    switch(message.action){
-        case 'init':
-            init();
-            break;
-
-        case 'init_profile':
-            initProfileCurrent();
-            break;
-    }
-});
-
 
 var htmlCardProfile = function (id){
     return `

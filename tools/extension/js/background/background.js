@@ -9,6 +9,33 @@ var   token;
 var   realtime;
 var   status;
 
+
+class SendWhenStart {
+  constructor(){
+    if(!!SendWhenStart.instance){
+        return SendWhenStart.instance;
+    }
+
+    SendWhenStart.instance = this;
+    this.data = {};
+    return this;
+  }
+
+  send(tabId){
+    Object.keys(this.data).forEach((e) =>
+      chrome.tabs.sendMessage(tabId, this.data[e]));
+  }
+
+  add(name, data){
+    this.data[name] = data;
+  }
+
+  remove(name){
+    delete this.data[name];
+  }
+}
+
+
 class CacheAPI {
   constructor(){
     if(!!CacheAPI.instance){
@@ -69,10 +96,25 @@ class CacheAPI {
 }
 
 const Init = function (){
-    chrome.storage.sync.get(['token', 'status'], function (data){
+    chrome.storage.sync.get(['token', 'status', 'iconposX', 'iconposY'], function (data){
       token = data.token;
-      status = data.status ? data.status : false;
-      ///realtime = new Realtime();
+      status = data.status ? data.status : "false";
+  
+      if(IsTrue(status)){
+        realtime = new Realtime();
+      }
+
+      var px, py;
+      if(!!data.iconposX){
+        px = data.iconposX;
+        py = data.iconposY;
+      } else {
+        px = 0;
+        py = 0;
+      }
+
+      (new SendWhenStart()).add('init_admin', {action: "init_admin", data: {x: px, y: py}});
+
     });
 }
 
@@ -91,6 +133,10 @@ const RequestAPI = function(path, response, method = "GET", data = null){
 
 const IsPageFBFriends = function (url){
   return /.*(facebook|fb).com\/(((.+)\/friends)|.+sk=friends)/g.exec(url);
+}
+
+const IsPageFB = function (url){
+  return /.*(facebook|fb).com/g.exec(url);
 }
 
 const IsTrue = function (b){
@@ -147,6 +193,15 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         status = req.status;
         chrome.storage.sync.set({"status" : req.status}, function (){
         });
+
+        if(IsTrue(status)){
+          realtime = new Realtime();
+        }
+        else {
+          if(!!realtime) realtime.close();
+          realtime = undefined;
+        }
+
         res();
       break;
 
@@ -200,6 +255,11 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         CacheAPI.instance.data = {};
         res();
       break;
+
+    case "upd_pos_icon_admin":
+        (new SendWhenStart()).add('init_admin', {action: "init_admin", data: {x: req.data.x, y: req.data.y}});
+        chrome.storage.sync.set({"iconposX": req.data.x, "iconposY": req.data.y}, function (){});
+      break;
   }
 
   return true;
@@ -208,7 +268,6 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   if(changeInfo.status === 'complete' && IsTrue(status)) {
-
       if (IsPageFBFriends(tab.url)){
         ///chrome.tabs.insertCSS(tabId, {file:"css/style_content.css"});
         ///chrome.tabs.executeScript(tabId, {file: "js/jquery.min.js"});
@@ -216,11 +275,26 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         chrome.tabs.sendMessage(tabId, {action: "init"});
       }
 
-      
-      chrome.tabs.sendMessage(tabId, {action: "init_profile"});
+      if(IsPageFB(tab.url)){
+        chrome.tabs.sendMessage(tabId, {action: "init_profile"});
+      }
 
+      (new SendWhenStart()).send(tabId);
     }
 });
+
+function SendTabsCurrent(data){
+  chrome.tabs.query({currentWindow: true,active: true}, function(tabs){ 
+    chrome.tabs.sendMessage(tabs[0].id, data);
+  });
+}
+
+function SendAllTabs(data){
+  chrome.tabs.query({}, function(tabs){ 
+    for(var i in tabs)
+      chrome.tabs.sendMessage(tabs[i].id, data);
+  });
+}
 
 
 function memorySizeOf(obj) {
