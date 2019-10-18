@@ -73,13 +73,13 @@
 /*-----------------header*/
 body{
     background-color:rgb(255, 255, 255);
-    width: 98%;
     font-family: Roboto;
     margin: auto;
 }
 /*----------------------------------Text*/
 @import url(https://fonts.googleapis.com/css?family=Montserrat:700);
 .word {
+  display: none;
   text-align: center;
   margin-top:70px;
   color: rgb(0, 0, 0);
@@ -93,21 +93,20 @@ body{
 }
 /*----------------------------------------Box search*/
 .search {
-  position: absolute;
-  top: 50%;
+  position: relative;
   left: 40%;
-  margin-left: -16rem;
-  margin-top: -3rem;
+  margin-left: -17rem;
+  margin-top: 12rem;
   width: 50rem;
   height: 6rem;
 }
 @media screen and (max-width: 812px) {
 	.search {
-    left: 1%;
+    left: 0%;
     text-align: center;
     margin-left: 0rem;
-    margin: auto;
-    width: 23rem;
+    margin: 80% auto;
+    width: 80%;
   }
   .search__border {
     position: absolute;
@@ -122,15 +121,16 @@ body{
   }
   .search__input {
     position: relative;
-    top:-90px;
-    width:20rem;
+    top:-96px;
+    left: -10%;
+    width:75%;
     height: 4rem;
     padding: 0rem 0 0rem 1rem;
     background: transparent;
     outline: none;
     border: none;
-    font-size: 1rem;
-    font: 100 normal 1.5em/2 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font: 1000 normal 1em/2 'Roboto', sans-serif;
     color: rgb(0, 0, 0);
     z-index: -1;
     opacity: 0;
@@ -185,7 +185,7 @@ body{
   outline: none;
   border: none;
   font-size: 2.4rem;
-  font: 700 normal 1.5em/1.5 'Montserrat', sans-serif;
+  font: 700 normal 1.5em/1.5 'Roboto', sans-serif;
   color: rgb(0, 0, 0);
   z-index: -1;
   opacity: 0;
@@ -375,29 +375,29 @@ body{
 }
 
 .sub-menu .menu-item:nth-child(1) {
-	animation-duration: 0.2s;
+	animation-duration: 0.1s;
 	animation-delay: 0s;
 }
 
 .sub-menu .menu-item:nth-child(2) {
-	animation-duration: 0.3s;
+	animation-duration: 0.2s;
 	animation-delay: 0.1s;
 }
 
 .sub-menu .menu-item:nth-child(3) {
-	animation-duration: 0.4s;
+	animation-duration: 0.3s;
 	animation-delay: 0.2s;
 }
 .sub-menu .menu-item:nth-child(4) {
-	animation-duration: 0.5s;
+	animation-duration: 0.4s;
 	animation-delay: 0.3s;
 }
 .sub-menu .menu-item:nth-child(5) {
-	animation-duration: 0.6s;
+	animation-duration: 0.5s;
 	animation-delay: 0.4s;
 }
 .sub-menu .menu-item:nth-child(6) {
-	animation-duration: 0.7s;
+	animation-duration: 0.6s;
 	animation-delay: 0.5s;
 }
 .sub-menu a:hover {
@@ -405,14 +405,14 @@ body{
   text-decoration: none;
 }
 
-.sub-menu .menu-item a 6
+.sub-menu .menu-item a {
 	padding: 0 0.75rem;
 }
 
 @media screen and (max-width: 600px) {
 	.sub-menu .menu-item {
-    background-color: #000000;
-    top: -60px;
+    
+    text-align: center;
 	}
 }
 
@@ -438,7 +438,7 @@ body{
 		flex-direction: column;
 		justify-content: center;
 		height: 60vh;
-		animation: fade 0.2s ease-out;
+    animation: fade 0.2s ease-out;
 	}
 
 	.menu > ol > .menu-item {
@@ -482,7 +482,7 @@ body{
 	}
 
 	.menu:hover > ol {
-		display: flex;
+    display: flex;
 	}
 
 	.menu:hover:after {
@@ -533,9 +533,18 @@ body{
 	}
 }
 /*---------------------------------------------Slide profile*/
+@media screen and (max-width: 812px) {
+	.NewProfile{
+    margin:70% auto auto auto;
+    width: auto;
+  }
+}
+@media screen and (min-width: 812px) {
 .NewProfile{
+    margin:-7% auto auto auto;
     padding-bottom: 20px;
-    padding-top: 600px;
+    padding-top: 100px;
+  }
 }
 .NewProfile a{
     text-decoration: oldlace;
@@ -701,11 +710,23 @@ opacity: 1;
 /*----------------profile*/
 @media screen and (max-width: 812px) {
 	.portfolio-item {
-    position: relative;
+  position: relative;
   overflow: hidden;
   width: 100%;
   height: 300px;
   }
+  .portfolio-item img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    height: auto;
+    min-width: 100%;
+    min-height: 100%;
+    max-width: 200%;
+    max-height: 200%;
+    transform: translate(-50%, -50%);
+    }
 }
 .link {
   display: flex;
@@ -745,22 +766,23 @@ opacity: 1;
 .content-block__effect {
   margin-bottom: 50px;
 }
+.col-sm-6,.col-lg-3{
+  padding-bottom: 18px;
+}
 /* effects styles !!!YOU NEED THEM */
 /* don't forget to add your own colors and parameters */
 .portfolio-effect {
-  margin: auto;
   text-align: center;
   display: flex;
   justify-content: space-between;
 }
 @media screen and (min-width: 812px) {
-.portfolio-item {
-  position: relative;
-  overflow: hidden;
-  width: 300px;
-  height: 300px;
-}
-}
+  .portfolio-item {
+    position: relative;
+    overflow: hidden;
+    width: 320px;
+    height: 320px;
+  }
 .portfolio-item img {
   position: absolute;
   top: 50%;
@@ -772,6 +794,7 @@ opacity: 1;
   max-width: 200%;
   max-height: 200%;
   transform: translate(-50%, -50%);
+  }
 }
 .portfolio-item__info {
   position: absolute;
@@ -883,4 +906,15 @@ opacity: 1;
   transition-duration: 0.2s;
   transition-timing-function: linear;
   transition-delay: 0.95s;
+}
+/*--------------------------------Footer*/
+.info:after {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  height: 2px;
+  width: 100%;
+  content: '';
+  background-color: #c0a062;
 }
