@@ -392,6 +392,16 @@ div[id^='yuh_profile_']:hover .show-del {
   user-select: none; 
 }
 
+.menu div:not([data-load='1']):hover {
+  background: rgb(247, 244, 244);
+}
+
+
+.menu div[data-load='1'] {
+  background-color: #f4f5f7;
+}
+
+
 .yuh-admin-main > .title {
   text-align: center;
   padding: 10px;
