@@ -282,3 +282,146 @@ div[id^='yuh_profile_']:hover .show-del {
   top: 0;
   transition: none;
 }
+
+.yuh-admin {
+  position: fixed;
+  z-index: 1000000;
+  top: 70%;
+  left: 70%;
+}
+
+.yuh-admin-menu {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  cursor: pointer;
+  box-shadow: 1px 1px 10px #ccc;
+  border-radius: 40px;
+}
+
+.yuh-admin-menu span:not([id]) {
+  position: absolute;
+  display: block;
+  width: 50%;
+  left: 25%;
+  height: 3px;
+  background-color: rgb(97, 85, 85);
+  transition: transform 1s, opacity 1s, top 0.25s;
+}
+
+.yuh-admin-menu span:nth-child(1){
+  top: 12px;
+}
+
+.yuh-admin-menu span:nth-child(2){
+  top: 18.6px;
+}
+
+.yuh-admin-menu span:nth-child(3){
+  top: 25.2px;
+}
+
+#n-admin, #n-guest {
+  position: absolute;
+  display: block;
+  min-width: 20px;
+  height: 20px;
+  color: #fff;
+  text-align: center;
+  border-radius: 20px;
+  line-height: 20px;
+  transform: translate(-105%, 0);
+  user-select: none; 
+  font-size: 9px;
+  padding: 1px 3px;
+  background-color: #b4c4da;
+}
+
+.yuh-admin-menu #n-admin {
+  top: -4px;
+  left: 0px;
+}
+
+.yuh-admin-menu #n-guest {
+  top: 23px;
+  left: 0px;
+}
+
+.exit-menu span:nth-child(1) {
+  top: 18.6px;
+  transform: rotate(45deg);
+}
+
+.exit-menu span:nth-child(2) {
+  opacity: 0;
+}
+
+.exit-menu span:nth-child(3) {
+  top: 18.6px;
+  transform: rotate(-45deg);
+}
+
+.yuh_drag {
+  position: fixed;
+  z-index: 500000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ccc;
+  opacity: 0.3;
+}
+
+.yuh-admin-main {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 500px;
+  min-height: 100px;
+  background-color: #fff;
+  z-index: -1;
+  box-shadow: 1px 1px 10px #ccc;
+  transition: opacity 0.5s;
+  display: none;
+}
+
+.yuh-admin-main > .menu {
+  float: left;
+  width: 25%;
+  box-sizing: border-box;
+  user-select: none; 
+}
+
+.yuh-admin-main > .title {
+  text-align: center;
+  padding: 10px;
+  color: white;
+  background-color: #5689d4;
+}
+
+.yuh-admin-main > .content {
+  float: left;
+  width: 75%;
+  box-sizing: border-box;
+  height: 300px;
+  padding: 10px;
+  background-color: #f4f5f7;
+}
+
+.yuh-admin-main::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.yuh-admin-main > .menu > div {
+  padding: 10px;
+  color: rgb(83, 80, 80);
+  border-top:1px solid rgb(247, 242, 242);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.yuh-admin-main > .menu > div:nth-child(1) {
+  border-top: none;
+}
