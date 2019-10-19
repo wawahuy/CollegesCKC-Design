@@ -3,6 +3,11 @@
 .col-lg-2{
     border-right: 1px solid slategrey;
 }
+@media screen and (max-width: 812px){
+  .col-lg-2{
+    display: none;
+  }
+}
 h4{
   color: #c0a062;
 }
@@ -16,7 +21,7 @@ h4::after{
   background-color: #c0a062;
 }
 ul.left{
-  margin-top: 25%;
+  margin-top: 24%;
   margin-left: -10%;
 }
 ul>li{
@@ -24,6 +29,7 @@ ul>li{
     height: 30px;
 }
 ul>li a{
+    display: block;
     text-decoration: none;
     color: #000000;
 }
@@ -407,4 +413,48 @@ opacity: 1;
   transition-duration: 0.2s;
   transition-timing-function: linear;
   transition-delay: 0.95s;
+}
+
+/*--------------------------------------------------------------------------Charts.html*/
+/*-------------------------Number charts*/
+.chart-number{
+  height: 3rem;
+  margin-top: 25px;
+}
+.chart-number::after{
+  left: 0;
+  bottom: 0;
+  display: block;
+  height: 1px;
+  width: 90%;
+  content: '';
+  background-color: #c0a062;
+}
+.chart-number .number{
+  text-align: center;
+  width: 7%;
+  padding-left: 0%;
+  float: left;
+}
+.one{
+  font-size: 3rem;
+  height: 4rem;
+  background-color: darkorange;
+  text-shadow: 1px 1px #ffffff,1px 2px #ffffff,2px 3px #ffffff,3px 4px #ffffff;
+}
+.two{
+  font-size: 2rem;
+  height: 3rem;
+  background-color: darkcyan;
+  text-shadow: 1px 1px #ffffff,1px 2px #ffffff,2px 3px #ffffff,3px 4px #ffffff;
+}
+.three{
+  font-size: 1.2rem;
+  height: 2rem;
+  background-color:lawngreen;
+  text-shadow: 1px 1px #ffffff,1px 2px #ffffff,2px 3px #ffffff,3px 4px #ffffff;
+}
+.info-number{
+  width: 90%;
+  float: left;
 }
