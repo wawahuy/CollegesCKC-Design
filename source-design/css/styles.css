@@ -79,12 +79,13 @@ body{
 /*----------------------------------Text*/
 @import url(https://fonts.googleapis.com/css?family=Montserrat:700);
 .word {
+  position: absolute;
   display: none;
   text-align: center;
   margin-top:70px;
   color: rgb(0, 0, 0);
-  font: 1000 normal 3em/1.5 'Roboto', sans-serif;
-  text-shadow: 1px 2px #c0a062, 2px 4px #c0a062, 3px 6px #c0a062, 4px 8px #c0a062;
+  font: 1000 normal 3em/2 'Roboto', sans-serif;
+  /*text-shadow: 1px 2px #c0a062;*/
 }
 @media screen and (max-width: 812px) {
 	.word {
@@ -118,6 +119,7 @@ body{
     border-radius: 10rem;
     transform: translate(-50%, -50%);
     transition: width 0.4s 0.4s;
+    z-index: -1;
   }
   .search__input {
     position: relative;
@@ -319,7 +321,7 @@ body{
 }
 
 .menu > ol {
-	max-width: 900px;
+	max-width: 1000px;
 	padding: 0 2rem;
 	display: flex;
 }
@@ -437,11 +439,15 @@ body{
 		background: rgb(255, 255, 255);
 		flex-direction: column;
 		justify-content: center;
-		height: 60vh;
+		height: 30vh;
     animation: fade 0.2s ease-out;
 	}
-
+  .menu >ol ol.sub-menu{
+    margin-top: 80px;
+  }
 	.menu > ol > .menu-item {
+    height: 40px;
+    margin-top: 5rem ;
 		flex: 0;
 		opacity: 0;
 		animation: enter 0.3s ease-out forwards;
@@ -535,7 +541,7 @@ body{
 /*---------------------------------------------Slide profile*/
 @media screen and (max-width: 812px) {
 	.NewProfile{
-    margin:70% auto auto auto;
+    margin:60% auto auto auto;
     width: auto;
   }
 }
@@ -777,7 +783,7 @@ opacity: 1;
   justify-content: space-between;
 }
 @media screen and (min-width: 812px) {
-  .portfolio-item {
+  .col-lg-3>.portfolio-item {
     position: relative;
     overflow: hidden;
     width: 320px;
