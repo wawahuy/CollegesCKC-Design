@@ -106,6 +106,16 @@ Admin.init = function (){
             $('.yuh-admin-main').css('opacity', 0);
         }
     });
+
+    $('.menu').find('div').click(function (){
+        var m = $(this).attr('data-page');
+        if(!!m && $(this).attr('data-load') == '0'){
+            $('#yuh_content').html("<div class='lds-hourglass'></div>");
+            $('.menu div[data-load="1"]').attr('data-load', 0);
+            $(this).attr('data-load', '1');
+            (Pages[m].bind($('#yuh_content')))();
+        }
+    });
 }
 
 Admin.changeIconPosition = function (x, y) {
@@ -118,10 +128,7 @@ Admin.changeIconPosition = function (x, y) {
         }, data => {});
 }
 
-Admin.openPage = function (page){
-    var d = $('yuh_content');
-        
-}
+
 
 Admin.generalCode = `
     <div class="yuh-admin" id="yuh_admin">
@@ -138,10 +145,12 @@ Admin.generalCode = `
                 Admin Cao Thắng Student
             </div>
             <div class="menu">
-                <div>Trạng thái</div>
-                <div>D.Sách User</div>
-                <div>Duyệt B.Luận</div>
-                <div>Kênh thế giới</div>
+                <div data-load='0' data-page='PageInfo'>Chung</div>
+                <div data-load='0' data-page='PageUserOnline'>User Online</div>
+                <div data-load='0' data-page='PageHistory'>Lịch Sử Search</div>
+                <div data-load='0' data-page='PageComment'>Duyệt B.Luận</div>
+                <div data-load='0' data-page='PageErrorLink'>Link Hỏng</div>
+                <div data-load='0' data-page='PageChat'>Kênh thế giới</div>
             </div>
             <div class="content" id="yuh_content">
             </div>
@@ -149,3 +158,8 @@ Admin.generalCode = `
     </div>
 `;
 
+Pages = {};
+
+Pages.PageInfo = function () {
+    this.html(``);
+}
