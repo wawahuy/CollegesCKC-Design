@@ -439,7 +439,7 @@ body{
 		background: rgb(255, 255, 255);
 		flex-direction: column;
 		justify-content: center;
-		height: 30vh;
+		height: 55vh;
     animation: fade 0.2s ease-out;
 	}
   .menu >ol ol.sub-menu{
@@ -447,7 +447,7 @@ body{
   }
 	.menu > ol > .menu-item {
     height: 40px;
-    margin-top: 5rem ;
+    margin-top: 1rem ;
 		flex: 0;
 		opacity: 0;
 		animation: enter 0.3s ease-out forwards;
