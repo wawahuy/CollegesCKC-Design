@@ -16,12 +16,28 @@ chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
             Admin.init();
             break;
 
-        case 'actionShowNumClient':
+        case 'getNumClient':
             $('#n-admin').html("Admin("+message.data.admins+")");
             $('#n-guest').html("Guest("+message.data.guests+")");
             break;
+
+        case 'alert':
+            AlertClient(message.data);
+            break;
     }
 });
+
+
+//// Alert ////
+function AlertClient(message){
+    var o = $("<div>"+message+"</div>");
+    $("#yuh-alert").append(o);
+    setTimeout(function (o){
+        o.remove();
+    }, 4300, o);
+}
+
+
 
 ////// Move Element ///////
 class DragDom {
@@ -99,11 +115,13 @@ Admin.init = function (){
             $(this).addClass('exit-menu');
             $('.yuh-admin-main').css('display', 'block');
             $('.yuh-admin-main').css('opacity', 1);
+            $($('.menu').find('div').get(0)).click();
         }
         else {
             $(this).removeClass('exit-menu');
             $('.yuh-admin-main').css('display', 'none');
             $('.yuh-admin-main').css('opacity', 0);
+            $('.menu div[data-load="1"]').attr('data-load', 0);
         }
     });
 
@@ -116,6 +134,7 @@ Admin.init = function (){
             (Pages[m].bind($('#yuh_content')))();
         }
     });
+
 }
 
 Admin.changeIconPosition = function (x, y) {
@@ -138,6 +157,8 @@ Admin.generalCode = `
             <span></span>
             <span id="n-admin">---</span>
             <span id="n-guest">---</span>
+            <div class="alert" id="yuh-alert">
+            </div>
         </div>
 
         <div class="yuh-admin-main">
@@ -146,10 +167,11 @@ Admin.generalCode = `
             </div>
             <div class="menu">
                 <div data-load='0' data-page='PageInfo'>Chung</div>
-                <div data-load='0' data-page='PageUserOnline'>User Online</div>
+                <div data-load='0' data-page='PageUserOnline'>DS User</div>
+                <div data-load='0' data-page='PageProfie'>DS Hồ Sơ FB</div>
+                <div data-load='0' data-page='PageLike'>DS Like</div>
                 <div data-load='0' data-page='PageHistory'>Lịch Sử Search</div>
                 <div data-load='0' data-page='PageComment'>Duyệt B.Luận</div>
-                <div data-load='0' data-page='PageErrorLink'>Link Hỏng</div>
                 <div data-load='0' data-page='PageChat'>Kênh thế giới</div>
             </div>
             <div class="content" id="yuh_content">
@@ -158,8 +180,47 @@ Admin.generalCode = `
     </div>
 `;
 
+
+////// Real time init ////////
+function Send(action, data){
+    return new Promise((res, rej) => {
+        try {
+            chrome.runtime.sendMessage(
+                { 
+                    action: 'realtime',
+                    data: {action, data}
+                }, dt => { res(dt) });
+        } catch(e) {
+            rej();
+        }
+    });
+}
+
+
+
+//////// Page /////////
+
 Pages = {};
 
-Pages.PageInfo = function () {
-    this.html(``);
+
+////////////////////// Page Info /////////////////////
+
+Pages.PageInfo = async function () {
+    info = await Send('getPageInfo');
+    
+    admins = info.admins.map(element => {
+        return element;
+    });
+
+    this.html(`
+        <div style="line-height: 25px;">
+            Hiện tại có <span style="color: red;">${info.admins.length}</span> admin trực tuyến.<br>
+            Hiện tại có <span style="color: red;">${info.guests}</span> khách trực tuyến.<br> 
+            Server RT uptime: <span style="color: red;">${info.uptime}</span><br>
+            <hr>
+            Danh sách admin trực tuyến: <span style="color: red;">
+                ${admins}
+            </span>
+        </div>
+    `);
 }

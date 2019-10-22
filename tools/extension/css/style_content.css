@@ -376,7 +376,7 @@ div[id^='yuh_profile_']:hover .show-del {
   position: absolute;
   top: 20px;
   left: 20px;
-  width: 500px;
+  width: 700px;
   min-height: 100px;
   background-color: #fff;
   z-index: -1;
@@ -410,10 +410,11 @@ div[id^='yuh_profile_']:hover .show-del {
 }
 
 .yuh-admin-main > .content {
+  color: #90949c;
   float: left;
   width: 75%;
   box-sizing: border-box;
-  height: 300px;
+  height: 400px;
   padding: 10px;
   background-color: #f4f5f7;
 }
@@ -434,4 +435,34 @@ div[id^='yuh_profile_']:hover .show-del {
 
 .yuh-admin-main > .menu > div:nth-child(1) {
   border-top: none;
+}
+
+.yuh-admin-menu > .alert {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  color: rgb(46, 35, 35);
+  transform: translate(0, -100%);
+  white-space: nowrap;
+}
+
+.alert > div {
+  white-space: nowrap;
+  animation: an_notf 4.5s;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 10px;
+  margin: 5px;
+  transition: 1s all;
+}
+
+@keyframes an_notf {
+  0% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+
+hr {
+  border: none;
+  border-top: 0.5px solid #ccc;
 }

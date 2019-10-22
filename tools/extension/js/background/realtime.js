@@ -10,6 +10,9 @@ class Realtime {
 
         this.connect();
 
+        this.stackId = 0;
+        this.stackReCall = {};
+
         return this;
     }
 
@@ -17,7 +20,7 @@ class Realtime {
         this.forceClose = false;
 
         try {
-            this.connection = new WebSocket(WS);
+            this.connection = new WebSocket(WS+'/admin_'+token);
             this.connection.onopen    =  this.ws_open.bind(this);
             this.connection.onerror   =  this.ws_error.bind(this);
             this.connection.onclose   =  this.ws_close.bind(this);
@@ -27,16 +30,14 @@ class Realtime {
     }
 
     reconnect(){
+        AlertClient("server RT re-connection...");
         setTimeout(() => {
             this.connect();
-        }, 10000);
+        }, 5000);
     }
 
     ws_open(){
-        /// Use token in background.js
-        if(!!token){
-            this.send('admin', token);
-        }
+        AlertClient("server RT connected!");
     }
 
     ws_error(){
@@ -45,11 +46,23 @@ class Realtime {
     ws_close(){
         if(!this.forceClose)
             this.reconnect();
+        else {
+            (new SendWhenStart()).add(d.action, {admins: '--', guests: '--'});
+        }
     }
 
     ws_message(e){
         var obj = JSON.parse(e.data);
-        this[obj.action](obj.data);
+        try {
+            this[obj.action](obj.data);
+        } catch {
+        }
+
+
+        if(!!obj.id){
+            this.stackReCall[obj.id].response(obj.data);
+            this.clear_stack(obj.id);
+        }
     }
 
     send(action, data){
@@ -57,6 +70,26 @@ class Realtime {
             action: action,
             data: data
         }));
+    }
+
+    send_and_response(action, data, res, timeout = 20000){
+        this.stackId++;
+        this.stackReCall[this.stackId] = {};
+        this.connection.send(JSON.stringify({
+            action: action,
+            data: data,
+            id: this.stackId
+        }));
+        this.stackReCall[this.stackId].response = res;
+        this.stackReCall[this.stackId].handleTimeout = setTimeout(() => {
+            (this.clear_stack.bind(this))(this.stackId);
+        }, timeout);
+    }
+
+    clear_stack(idStack){
+        clearTimeout(this.stackReCall[idStack].handleTimeout);
+        this.stackReCall[idStack].response(null);
+        delete this.stackReCall[idStack];
     }
     
     close(){
@@ -67,17 +100,38 @@ class Realtime {
 
     ///////////ACTION///////////////
 
-    actionShowNumClient(data){
+    getNumClient(data){
         var d = {
-            action: 'actionShowNumClient',
+            action: 'getNumClient',
             data
         };
 
         SendAllTabs(d);
 
-        (new SendWhenStart()).add(d.action, d);
+        var redata = new SendWhenStart();
+        var olddata = redata.get(d.action);
+
+        if(!!olddata){
+            var iadmins = data.admins - olddata.data.admins;
+            var iguests = data.guests - olddata.data.guests;
+
+            if(iadmins != 0){
+                AlertClient(BeaNum(iadmins) + " admin");
+            }
+
+            if(iguests != 0){
+                AlertClient(BeaNum(iguests) + " guest");
+            }
+        }
+
+        redata.add(d.action, d);
     }
 
     actionAuthAdmin(data){
     }
+}
+
+
+function  BeaNum(num) {
+    return num < 0 ? num : "+"+num;
 }

@@ -1,0 +1,29 @@
+  config:
+    target: "ws://localhost:8080/admin_adf83f88b87c03df7fbe2a314849207c"
+    phases:
+      - duration: 10
+        arrivalCount: 2000
+    ws:
+      # Set a custom subprotocol:
+      subprotocols:
+        - json
+        - soap
+  scenarios:
+    - engine: "ws"
+      flow:
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5
+        - send: "hello"
+        - think: 5

@@ -1,8 +1,9 @@
 'use strict';
 
 const HOST = 'http://localhost:8000/';
-//const HOST = 'https://caothangstudent.herokuapp.com/';
+// const HOST = 'https://caothangstudent.herokuapp.com/';
 const WS = 'ws://localhost:8080'
+// const WS = 'ws://caothang-student-realtime.herokuapp.com';
 const VERSION = chrome.runtime.getManifest().version;
 
 var   token;
@@ -28,6 +29,10 @@ class SendWhenStart {
 
   add(name, data){
     this.data[name] = data;
+  }
+
+  get(name){
+    return this.data[name];
   }
 
   remove(name){
@@ -260,6 +265,10 @@ chrome.runtime.onMessage.addListener(function(req, sender, res) {
         (new SendWhenStart()).add('init_admin', {action: "init_admin", data: {x: req.data.x, y: req.data.y}});
         chrome.storage.sync.set({"iconposX": req.data.x, "iconposY": req.data.y}, function (){});
       break;
+
+    case "realtime":
+        realtime.send_and_response(req.data.action, req.data.data, (d) => res(d));
+        break;
   }
 
   return true;
@@ -286,6 +295,13 @@ chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 function SendTabsCurrent(data){
   chrome.tabs.query({currentWindow: true,active: true}, function(tabs){ 
     chrome.tabs.sendMessage(tabs[0].id, data);
+  });
+}
+
+function AlertClient(message) {
+  SendAllTabs({
+    action: 'alert',
+    data: message
   });
 }
 

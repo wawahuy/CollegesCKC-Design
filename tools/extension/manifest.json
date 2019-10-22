@@ -7,7 +7,6 @@
     "background": {
         "scripts": [
           "js/jquery.min.js",
-          "js/background/notification.js",
           "js/background/realtime.js",
           "js/background/background.js"
         ],

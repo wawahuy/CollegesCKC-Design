@@ -11,3 +11,4 @@ Dự án được lưu tại đây chứa các thành phần phục vụ cho vi�
 
 <hr>
 Project Web (Private): https://github.com/wawahuy/caothang-student-web
+Project RealTime: https://github.com/wawahuy/caothang-student-realtime
