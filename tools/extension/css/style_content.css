@@ -417,6 +417,7 @@ div[id^='yuh_profile_']:hover .show-del {
   height: 400px;
   padding: 10px;
   background-color: #f4f5f7;
+  overflow-y: auto;
 }
 
 .yuh-admin-main::after {

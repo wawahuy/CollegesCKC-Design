@@ -1,8 +1,8 @@
   config:
-    target: "ws://caothang-student-realtime.herokuapp.com/admin_42b8767846c251553c50b725243319c4"
+    target: "ws://caothang-student-realtime.herokuapp.com/admin_d2779206bbdd6046242d20932185c16a"
     phases:
-      - duration: 80
-        arrivalCount: 500
+      - duration: 60
+        arrivalCount: 300
     ws:
       # Set a custom subprotocol:
       subprotocols:
@@ -62,16 +62,3 @@
         - send: "hello"
         - think: 5
         - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5
-        - send: "hello"
-        - think: 5

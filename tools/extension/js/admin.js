@@ -102,6 +102,7 @@ class DragDom {
 
 Admin = {};
 Admin.IconPos = {};
+Admin.oldPage;
 
 Admin.init = function (){
     if($('#yuh_admin').length > 0)
@@ -131,7 +132,11 @@ Admin.init = function (){
             $('#yuh_content').html("<div class='lds-hourglass'></div>");
             $('.menu div[data-load="1"]').attr('data-load', 0);
             $(this).attr('data-load', '1');
-            (Pages[m].bind($('#yuh_content')))();
+            if(!!Admin.oldPage)
+                Admin.oldPage.Exit.bind($('#yuh_content'))();
+            Admin.oldPage = Pages[m];
+            Pages[m].Init.bind($('#yuh_content'))();
+            (Pages[m].Render.bind($('#yuh_content')))();
         }
     });
 
@@ -204,23 +209,45 @@ Pages = {};
 
 
 ////////////////////// Page Info /////////////////////
+Pages.PageInfo = {};
+Pages.PageInfo.Init = function () {
+    Pages.PageInfo.handleInterval = setInterval(function (o) {
+        if(!!Pages.PageInfo.handleInterval)
+            Pages.PageInfo.Render.bind(o)();
+    }, 1000, this)
+}
 
-Pages.PageInfo = async function () {
+Pages.PageInfo.Exit = function () {
+    clearInterval(Pages.PageInfo.handleInterval);
+    Pages.PageInfo.handleInterval = null;
+}
+
+Pages.PageInfo.Render = async function () {
     info = await Send('getPageInfo');
     
     admins = info.admins.map(element => {
-        return element;
+        return ' '+element;
     });
 
     this.html(`
         <div style="line-height: 25px;">
             Hiện tại có <span style="color: red;">${info.admins.length}</span> admin trực tuyến.<br>
             Hiện tại có <span style="color: red;">${info.guests}</span> khách trực tuyến.<br> 
-            Server RT uptime: <span style="color: red;">${info.uptime}</span><br>
+            Server RT uptime: <span style="color: red;">${BeuTime(info.uptime)}</span><br>
             <hr>
             Danh sách admin trực tuyến: <span style="color: red;">
                 ${admins}
             </span>
         </div>
     `);
+}
+
+function BeuTime(miliseconds) {
+  const pad = (n, z = 2) => ('00' + n).slice(-z);
+  const hh = pad(miliseconds / 3.6e6 | 0);
+  const mm = pad((miliseconds % 3.6e6) / 6e4 | 0);
+  const ss = pad((miliseconds % 6e4) / 1000 | 0);
+  const mmm = pad(miliseconds % 1000, 3);
+
+  return `${hh}:${mm}:${ss}.${mmm}`
 }
