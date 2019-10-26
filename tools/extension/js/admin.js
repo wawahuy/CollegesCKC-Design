@@ -24,6 +24,15 @@ chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
         case 'alert':
             AlertClient(message.data);
             break;
+
+        case 'getChatID':
+            Admin.ID = message.data;
+            break;
+
+        case 'newChat':
+            var data = message.data;
+            AlertClient(data.name + ': ' +data.message);
+            break;
     }
 });
 
@@ -123,6 +132,8 @@ Admin.init = function (){
             $('.yuh-admin-main').css('display', 'none');
             $('.yuh-admin-main').css('opacity', 0);
             $('.menu div[data-load="1"]').attr('data-load', 0);
+            if(!!Admin.oldPage)
+                Admin.oldPage.Exit.bind($('#yuh_content'))();
         }
     });
 
@@ -241,6 +252,78 @@ Pages.PageInfo.Render = async function () {
         </div>
     `);
 }
+
+
+///////////////////////// Page Chat /////////////////////
+Pages.PageChat = {};
+Pages.PageChat.Init = function () {
+}
+
+Pages.PageChat.Exit = function () {
+}
+
+Pages.PageChat.Chat = async function (message) {
+    if(message == "") return;
+
+    $('#chat-send').append("<div class='lds-hourglass'></div>");
+    $('#chat-send').prop('disabled', true);
+    $('#chat').prop('value', '');
+    await Send('chat', message);
+    $('#chat-send').prop('disabled', false);
+    $('#chat-send').find(".lds-hourglass").remove();
+}
+
+Pages.PageChat.Render = async function () {
+
+    this.html(`
+       <div class="pg-content-chat">
+
+            <div class="chat-element">
+                <div class="dif">
+                    <div class="message-avatar">
+                        <img class="admin-av"/>
+                    </div>
+                    <div class="message-main">
+                        <div class="message-name">G.Huy [Mod]</div>
+                        <div class="message-content">Hello, các bạn!</div>
+                        <div class="message-content">Hello, các bạn!</div>
+                         <div class="message-content">Hello, các bạn!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-element">
+                <div class="cur">
+                    <div class="message-avatar">
+                        <img class="admin-av"/>
+                    </div>
+                    <div class="message-main">
+                        <div class="message-name">G.Huy [Mod]</div>
+                        <div class="message-content">Hello, các bạn!</div>
+                        <div class="message-content">Hello, các bạn!</div>
+                         <div class="message-content">Hello, các bạn!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-time">
+                2019-02-10 29:32
+            </div>
+            
+       </div>
+       <div class="pg-input-chat">
+            <input id="chat" type="text" placeholder="Chat ở đây...">
+            <button id="chat-send"></button>
+            <button id="chat-like"></button>
+       </div>
+    `);
+
+    $("#chat-send").click(function () {
+       Pages.PageChat.Chat($('#chat').val());
+    });
+}
+
+
 
 function BeuTime(miliseconds) {
   const pad = (n, z = 2) => ('00' + n).slice(-z);

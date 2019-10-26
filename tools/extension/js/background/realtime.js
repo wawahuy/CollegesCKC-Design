@@ -54,7 +54,7 @@ class Realtime {
     ws_message(e){
         var obj = JSON.parse(e.data);
         try {
-            this[obj.action](obj.data);
+            this[obj.action](obj.data, obj);
         } catch {
         }
 
@@ -100,7 +100,7 @@ class Realtime {
 
     ///////////ACTION///////////////
 
-    getNumClient(data){
+    getNumClient(data, obj){
         var d = {
             action: 'getNumClient',
             data
@@ -125,6 +125,18 @@ class Realtime {
         }
 
         redata.add(d.action, d);
+    }
+    
+
+    getChatID(id, obj){
+        SendAllTabs(obj);
+
+        var redata = new SendWhenStart();
+        redata.add(obj.action, obj);
+    }
+
+    newChat(data, obj){
+        SendAllTabs(obj);
     }
 
     actionAuthAdmin(data){
