@@ -36,6 +36,7 @@
     "web_accessible_resources": [
       "image/send.png",
       "image/like.png",
-      "image/ad.jpg"
+      "image/ad.jpg",
+      "audio/alert.mp3"
     ]
   }

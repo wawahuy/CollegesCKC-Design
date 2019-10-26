@@ -1,15 +1,18 @@
 'use strict';
 
-const HOST = 'http://localhost:8000/';
-// const HOST = 'https://caothangstudent.herokuapp.com/';
-const WS = 'ws://localhost:8080'
-// const WS = 'ws://caothang-student-realtime.herokuapp.com';
+// const HOST = 'http://localhost:8000/';
+const HOST = 'https://caothangstudent.herokuapp.com/';
+// const WS = 'ws://localhost:8080'
+const WS = 'ws://caothang-student-realtime.herokuapp.com';
 const VERSION = chrome.runtime.getManifest().version;
 
 var   token;
 var   realtime;
 var   status;
 
+var audio = {};
+audio.chat = new Audio(chrome.runtime.getURL("audio/mess.mp3"));
+audio.alert = new Audio(chrome.runtime.getURL("audio/alert.mp3"));
 
 class SendWhenStart {
   constructor(){

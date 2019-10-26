@@ -124,18 +124,21 @@ class Realtime {
             }
         }
 
+        audio['alert'].play();
+
         redata.add(d.action, d);
     }
     
 
     getChatID(id, obj){
         SendAllTabs(obj);
-
         var redata = new SendWhenStart();
         redata.add(obj.action, obj);
     }
 
-    newChat(data, obj){
+    newChat(data, obj){        
+        if((new SendWhenStart()).get('getChatID').data != data.id) 
+            audio['chat'].play();
         SendAllTabs(obj);
     }
 

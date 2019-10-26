@@ -506,14 +506,20 @@ hr {
 
 .dif .message-main {
   float: left;
+  max-width: 75%;
 }
 
 .dif .message-content {
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.dif .message-content span {
   background-color: #fff;
   padding: 10px;
   color: rgb(15, 15, 15);
   border-radius: 10px;
-  margin: 5px 0;
 }
 
 .dif .message-name {
@@ -538,19 +544,27 @@ hr {
 
 .cur .message-main {
   float: right;
+  max-width: 75%;
 }
 
 .cur .message-content {
-  background-color: rgb(86, 45, 235);
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: right;
   padding: 10px;
+}
+
+.cur .message-content span {
+  background-color: rgb(86, 45, 235);
   color: rgb(248, 247, 247);
-  border-radius: 10px;
-  margin: 5px 0;
+  border-radius: 15px;
+  padding: 10px;
 }
 
 .cur .message-name {
   padding: 5px 5px 5px 10px;
   font-size: 11px;
+  text-align: right;
 }
 
 .message-ad {
@@ -558,10 +572,14 @@ hr {
 }
 
 .chat-time {
-  font-size: 12px;
-  padding: 10px;
-  text-align: center;
+  font-size: 10px;
+  padding: 0px 0 10px 0;
 }
+
+.cur .chat-time {
+  text-align: right;
+}
+
 
 .pg-input-chat {
   position: absolute;
