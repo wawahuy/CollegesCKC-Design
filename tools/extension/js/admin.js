@@ -24,6 +24,19 @@ chrome.runtime.onMessage.addListener( (message, sender, sendResponse) => {
         case 'alert':
             AlertClient(message.data);
             break;
+
+        case 'getChatID':
+            Admin.ID = message.data;
+            break;
+
+        case 'newChat':
+            var data = message.data;
+
+            if(data.id != Admin.ID)
+                AlertClient(data.name + ': ' +data.message);
+
+            Pages.PageChat.WriteChat(data);
+            break;
     }
 });
 
@@ -123,6 +136,8 @@ Admin.init = function (){
             $('.yuh-admin-main').css('display', 'none');
             $('.yuh-admin-main').css('opacity', 0);
             $('.menu div[data-load="1"]').attr('data-load', 0);
+            if(!!Admin.oldPage)
+                Admin.oldPage.Exit.bind($('#yuh_content'))();
         }
     });
 
@@ -242,6 +257,85 @@ Pages.PageInfo.Render = async function () {
     `);
 }
 
+
+///////////////////////// Page Chat /////////////////////
+Pages.PageChat = {};
+Pages.PageChat.Init = function () {
+}
+
+Pages.PageChat.Exit = function () {
+}
+
+Pages.PageChat.Chat = async function (message) {
+    if(message == "") return;
+
+    $('#chat-send').append("<div class='lds-hourglass'></div>");
+    $('#chat-send').prop('disabled', true);
+    $('#chat').prop('value', '');
+    await Send('chat', message);
+    $('#chat-send').prop('disabled', false);
+    $('#chat-send').find(".lds-hourglass").remove();
+}
+
+Pages.PageChat.WriteChat = function (data){
+    ob = Pages.PageChat.OldMessage || {};
+    var mess = `
+        <div class="message-content"><span>${data.message}</span></div>
+        <div class="chat-time">${data.date}</div>
+        `;
+
+    if(!!ob.data && ob.data.id == data.id){
+        ob.dom.find('.chat-time').remove();
+        ob.dom.find('.message-main').append(mess);
+    }
+    else {
+        ob.dom = $(`
+            <div class="chat-element">
+                <div class="${data.id == Admin.ID ? 'cur': 'dif'}">
+                    <div class="message-avatar">
+                        <img class="admin-av"/>
+                    </div>
+                    <div class="message-main">
+                        <div class="message-name">${data.name} ${data.isadmin ? "[Admin]" : ""}</div>
+                        ${mess}
+                    </div>
+                </div>
+            </div>
+        `);
+
+        $('.pg-content-chat').append(ob.dom);
+    }
+    ob.data = data;
+    Pages.PageChat.OldMessage = ob;
+
+    EndContent();
+}
+
+Pages.PageChat.Render = async function () {
+
+    var data = await Send("getHistoryChat");
+
+    this.html(`
+       <div class="pg-content-chat">        
+       </div>
+       <div class="pg-input-chat">
+            <input id="chat" type="text" placeholder="Chat ở đây...">
+            <button id="chat-send"></button>
+            <button id="chat-like"></button>
+       </div>
+    `);
+
+    $("#chat-send").click(function () {
+       Pages.PageChat.Chat($('#chat').val());
+    });
+
+    data.forEach(element => {
+        Pages.PageChat.WriteChat(element);
+    });
+}
+
+
+
 function BeuTime(miliseconds) {
   const pad = (n, z = 2) => ('00' + n).slice(-z);
   const hh = pad(miliseconds / 3.6e6 | 0);
@@ -250,4 +344,9 @@ function BeuTime(miliseconds) {
   const mmm = pad(miliseconds % 1000, 3);
 
   return `${hh}:${mm}:${ss}.${mmm}`
+}
+
+
+function EndContent() {
+    $("#yuh_content").animate({ scrollTop: $('#yuh_content')[0].scrollHeight}, 1000);
 }
