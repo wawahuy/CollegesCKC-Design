@@ -264,6 +264,7 @@ Pages.PageChat.Init = function () {
 }
 
 Pages.PageChat.Exit = function () {
+    Pages.PageChat.OldMessage = undefined;
 }
 
 Pages.PageChat.Chat = async function (message) {
@@ -277,10 +278,25 @@ Pages.PageChat.Chat = async function (message) {
     $('#chat-send').find(".lds-hourglass").remove();
 }
 
-Pages.PageChat.WriteChat = function (data){
+
+Pages.PageChat.Fix = function (mess) {
+    if(mess == "=:(Like)"){
+        return `
+        <div class="message-content">
+            <span  style='background: none;'>
+                <img src="${chrome.runtime.getURL("image/like.png")}" style='width: 64px; height:64px;' />
+            </span>
+        </div>`;
+    }
+    return `
+        <div class="message-content"><span>${mess}</span></div>
+    `;
+}
+
+Pages.PageChat.WriteChat = function (data, endscroll = true){
     ob = Pages.PageChat.OldMessage || {};
     var mess = `
-        <div class="message-content"><span>${data.message}</span></div>
+        ${Pages.PageChat.Fix(data.message)}
         <div class="chat-time">${data.date}</div>
         `;
 
@@ -308,7 +324,8 @@ Pages.PageChat.WriteChat = function (data){
     ob.data = data;
     Pages.PageChat.OldMessage = ob;
 
-    EndContent();
+    if(endscroll)
+        EndContent();
 }
 
 Pages.PageChat.Render = async function () {
@@ -329,9 +346,15 @@ Pages.PageChat.Render = async function () {
        Pages.PageChat.Chat($('#chat').val());
     });
 
+    $("#chat-like").click(function () {
+        Pages.PageChat.Chat('=:(Like)');
+     });
+
     data.forEach(element => {
-        Pages.PageChat.WriteChat(element);
+        Pages.PageChat.WriteChat(element, false);
     });
+
+    EndContent();
 }
 
 
@@ -348,5 +371,5 @@ function BeuTime(miliseconds) {
 
 
 function EndContent() {
-    $("#yuh_content").animate({ scrollTop: $('#yuh_content')[0].scrollHeight}, 1000);
+    $("#yuh_content").animate({ scrollTop: $('#yuh_content')[0].scrollHeight}, 500);
 }
