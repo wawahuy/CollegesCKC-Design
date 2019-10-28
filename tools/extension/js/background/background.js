@@ -1,9 +1,9 @@
 'use strict';
 
-const HOST = 'http://localhost:8000/';
-// const HOST = 'https://caothangstudent.herokuapp.com/';
-const WS = 'ws://localhost:8080'
-// const WS = 'ws://caothang-student-realtime.herokuapp.com';
+// const HOST = 'http://localhost:8000/';
+const HOST = 'https://caothangstudent.herokuapp.com/';
+// const WS = 'ws://localhost:8080'
+const WS = 'ws://caothang-student-realtime.herokuapp.com';
 const VERSION = chrome.runtime.getManifest().version;
 
 var   token;
